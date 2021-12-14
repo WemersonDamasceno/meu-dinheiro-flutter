@@ -1,17 +1,26 @@
+import 'package:finances/src/controllers/movimentacao_controller.dart';
 import 'package:finances/src/models/movimentacoes.dart';
+import 'package:finances/src/pages/home/widgets/input_widget.dart';
 import 'package:finances/src/pages/home/widgets/movimentacao_widget.dart';
 import 'package:finances/src/repositories/movimentacao_repositories.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
-class HomePage extends StatelessWidget {
+import 'widgets/dialog_bottom_adicionar_widget.dart';
+
+class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
   @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
   Widget build(BuildContext context) {
-    final repositorie = MovimentacaoRespositories();
-    final List<ItemMovimentacao> listMovimentacao = [];
-    var size = MediaQuery.of(context).size;
+    final _repositorie = MovimentacaoRespositories();
+    final List<ItemMovimentacao> _listMovimentacao = _repositorie.list;
+    var _size = MediaQuery.of(context).size;
 
     return Scaffold(
       body: Column(
@@ -19,8 +28,8 @@ class HomePage extends StatelessWidget {
           Stack(
             children: [
               Container(
-                height: size.height * .25,
-                width: size.width,
+                height: _size.height * .25,
+                width: _size.width,
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
                     begin: Alignment.topRight,
@@ -34,8 +43,8 @@ class HomePage extends StatelessWidget {
                 ),
                 child: Padding(
                   padding: EdgeInsets.symmetric(
-                      horizontal: size.width * 0.1,
-                      vertical: size.height * .08),
+                      horizontal: _size.width * 0.1,
+                      vertical: _size.height * .08),
                   child: Align(
                     alignment: Alignment.bottomLeft,
                     child: Column(
@@ -60,11 +69,11 @@ class HomePage extends StatelessWidget {
                 ),
               ),
               Positioned(
-                top: size.height * .18,
-                left: size.width * .05,
+                top: _size.height * .18,
+                left: _size.width * .05,
                 child: SizedBox(
                   height: 100,
-                  width: size.width * .9,
+                  width: _size.width * .9,
                   child: Card(
                     color: const Color(0xFFFF4328),
                     child: Row(
@@ -115,7 +124,7 @@ class HomePage extends StatelessWidget {
               Align(
                 alignment: Alignment.bottomLeft,
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
+                  padding: EdgeInsets.symmetric(horizontal: _size.width * 0.05),
                   child: const Text(
                     "Saldo financeiro",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
@@ -127,7 +136,7 @@ class HomePage extends StatelessWidget {
                 children: [
                   SizedBox(
                     height: 80,
-                    width: size.width * .4,
+                    width: _size.width * .4,
                     child: Card(
                       elevation: 5,
                       child: Column(
@@ -146,7 +155,7 @@ class HomePage extends StatelessWidget {
                   ),
                   SizedBox(
                     height: 80,
-                    width: size.width * .4,
+                    width: _size.width * .4,
                     child: Card(
                       elevation: 5,
                       child: Column(
@@ -170,8 +179,8 @@ class HomePage extends StatelessWidget {
                     alignment: Alignment.bottomLeft,
                     child: Padding(
                       padding: EdgeInsets.only(
-                          left: size.width * 0.05,
-                          right: size.width * 0.05,
+                          left: _size.width * 0.05,
+                          right: _size.width * 0.05,
                           top: 10),
                       child: const Text(
                         "Movimentações",
@@ -181,26 +190,27 @@ class HomePage extends StatelessWidget {
                     ),
                   ),
                   SizedBox(
-                    height: size.height * .44,
-                    child: listMovimentacao == []
+                    height: _size.height * .44,
+                    child: _listMovimentacao != []
                         ? ListView.builder(
                             padding: const EdgeInsets.all(8),
-                            itemCount: listMovimentacao.length,
+                            itemCount: _listMovimentacao.length,
                             scrollDirection: Axis.vertical,
                             shrinkWrap: true,
                             itemBuilder: (BuildContext context, int index) {
                               return ItemMovimentacaoWidget(
-                                  titulo: listMovimentacao[index].titulo,
-                                  data: listMovimentacao[index].data,
-                                  valor: listMovimentacao[index].valor,
-                                  icon: listMovimentacao[index].icon,
-                                  despesa: listMovimentacao[index].despesa,
-                                  colorIcon: listMovimentacao[index].colorIcon);
+                                  titulo: _listMovimentacao[index].titulo,
+                                  data: _listMovimentacao[index].data,
+                                  valor: _listMovimentacao[index].valor,
+                                  icon: _listMovimentacao[index].icon,
+                                  despesa: _listMovimentacao[index].despesa,
+                                  colorIcon:
+                                      _listMovimentacao[index].colorIcon);
                             })
                         : Column(
                             children: [
                               SizedBox(
-                                width: size.width * .6,
+                                width: _size.width * .6,
                                 child: LottieBuilder.asset(
                                     "assets/lottie/pig_animation.json"),
                               ),
@@ -236,17 +246,30 @@ class HomePage extends StatelessWidget {
                     color: Colors.green,
                   ),
                   title: const Text('Renda ou receita'),
-                  onTap: () => {}),
+                  onTap: () {
+                    Navigator.pop(context);
+                    _configurandoModalFormBottomSheet(context);
+                  }),
               ListTile(
-                leading: const Icon(
-                  Icons.remove_circle,
-                  color: Colors.red,
-                ),
-                title: const Text('Despesa'),
-                onTap: () => {},
-              ),
+                  leading: const Icon(
+                    Icons.remove_circle,
+                    color: Colors.red,
+                  ),
+                  title: const Text('Despesa'),
+                  onTap: () {
+                    Navigator.pop(context);
+                    _configurandoModalFormBottomSheet(context);
+                  }),
             ],
           );
+        });
+  }
+
+  void _configurandoModalFormBottomSheet(context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return const DialogBottomAdd();
         });
   }
 }

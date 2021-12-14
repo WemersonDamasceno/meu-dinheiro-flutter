@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         fontFamily: "Poppins",
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.red,
       ),
       home: const SplashPage(),
       initialRoute: '/',

@@ -5,7 +5,7 @@
 
 
 </p>
-<p align="center">Vamos jogar?!
+<p align="center">Vamos lá?!
 
 ---
 

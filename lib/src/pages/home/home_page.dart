@@ -18,8 +18,9 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    final _repositorie = MovimentacaoRespositories();
-    final List<ItemMovimentacao> _listMovimentacao = _repositorie.list;
+    final MovimentacaoController controller = MovimentacaoController();
+    final List<ItemMovimentacao> _listMovimentacao = controller.getList();
+
     var _size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -191,7 +192,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   SizedBox(
                     height: _size.height * .44,
-                    child: _listMovimentacao != []
+                    child: _listMovimentacao.isNotEmpty
                         ? ListView.builder(
                             padding: const EdgeInsets.all(8),
                             itemCount: _listMovimentacao.length,

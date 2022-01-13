@@ -1,13 +1,13 @@
 import 'package:flutter/cupertino.dart';
 
 class ItemMovimentacao {
-  int id;
-  String titulo;
-  String data;
-  String valor;
-  bool isDespesa;
-  IconData icon;
-  Color colorIcon;
+  int? id;
+  String? titulo;
+  String? data;
+  String? valor;
+  bool? isDespesa;
+  IconData? icon;
+  Color? colorIcon;
 
   ItemMovimentacao({
     required this.id,
@@ -32,7 +32,7 @@ class ItemMovimentacao {
     return map;
   }
 
-  ItemMovimentacao fromMap(Map<String, dynamic> map) {
+  ItemMovimentacao.fromMap(Map<String, dynamic> map) {
     id = map['id'];
     titulo = map['titulo'];
     data = map['data'];
@@ -40,14 +40,5 @@ class ItemMovimentacao {
     colorIcon = map['colorIcon'];
     isDespesa = map['isDespesa'];
     icon = map['icon'];
-
-    return ItemMovimentacao(
-        id: id,
-        colorIcon: colorIcon,
-        titulo: titulo,
-        data: data,
-        valor: valor,
-        isDespesa: isDespesa,
-        icon: icon);
   }
 }

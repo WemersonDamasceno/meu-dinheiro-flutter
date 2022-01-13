@@ -198,13 +198,13 @@ class _HomePageState extends State<HomePage> {
                             shrinkWrap: true,
                             itemBuilder: (BuildContext context, int index) {
                               return ItemMovimentacaoWidget(
-                                  titulo: _listMovimentacao[index].titulo,
-                                  data: _listMovimentacao[index].data,
-                                  valor: _listMovimentacao[index].valor,
-                                  icon: _listMovimentacao[index].icon,
-                                  despesa: _listMovimentacao[index].isDespesa,
+                                  titulo: _listMovimentacao[index].titulo!,
+                                  data: _listMovimentacao[index].data!,
+                                  valor: _listMovimentacao[index].valor!,
+                                  icon: _listMovimentacao[index].icon!,
+                                  despesa: _listMovimentacao[index].isDespesa!,
                                   colorIcon:
-                                      _listMovimentacao[index].colorIcon);
+                                      _listMovimentacao[index].colorIcon!);
                             })
                         : Column(
                             children: [

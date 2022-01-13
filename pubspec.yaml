@@ -36,6 +36,9 @@ dependencies:
   cupertino_icons: ^1.0.2
   lottie: ^1.1.0
   google_fonts: ^2.1.0
+  sqflite: ^1.1.7+3
+  path_provider: ^1.4.5
+  path: any
 
 dev_dependencies:
   flutter_test:

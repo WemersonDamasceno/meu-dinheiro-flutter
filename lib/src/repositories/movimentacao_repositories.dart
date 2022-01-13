@@ -1,5 +1,4 @@
 import 'package:finances/src/models/movimentacoes.dart';
-import 'package:flutter/material.dart';
 
 class MovimentacaoRespositories {
   List<ItemMovimentacao> getListMovimentacoes() {

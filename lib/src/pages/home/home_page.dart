@@ -1,8 +1,6 @@
 import 'package:finances/src/controllers/movimentacao_controller.dart';
 import 'package:finances/src/models/movimentacoes.dart';
-import 'package:finances/src/pages/home/widgets/input_widget.dart';
 import 'package:finances/src/pages/home/widgets/movimentacao_widget.dart';
-import 'package:finances/src/repositories/movimentacao_repositories.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
@@ -204,7 +202,7 @@ class _HomePageState extends State<HomePage> {
                                   data: _listMovimentacao[index].data,
                                   valor: _listMovimentacao[index].valor,
                                   icon: _listMovimentacao[index].icon,
-                                  despesa: _listMovimentacao[index].despesa,
+                                  despesa: _listMovimentacao[index].isDespesa,
                                   colorIcon:
                                       _listMovimentacao[index].colorIcon);
                             })

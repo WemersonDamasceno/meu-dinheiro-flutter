@@ -1,5 +1,5 @@
 import 'package:finances/src/models/movimentacoes.dart';
-import 'package:finances/src/stores/movimentacoes_store.dart';
+import 'package:finances/src/stores/movimentacoes/movimentacoes_store.dart';
 import 'package:flutter/material.dart';
 
 import 'input_widget.dart';

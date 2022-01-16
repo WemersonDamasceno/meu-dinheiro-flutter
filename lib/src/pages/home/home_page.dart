@@ -1,17 +1,18 @@
 import 'package:finances/src/models/movimentacoes.dart';
 import 'package:finances/src/pages/home/widgets/movimentacao_widget.dart';
-import 'package:finances/src/stores/movimentacoes_store.dart';
+import 'package:finances/src/stores/movimentacoes/movimentacoes_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:lottie/lottie.dart';
 import 'widgets/input_widget.dart';
 
 
-//Instancia do store    
+//Instancia dos stores    
 final storeMov = MovimentacoesStore();
-final controllerTitulo = TextEditingController();
-final controllerValor = TextEditingController();
-var controllerIcon = -1;
+
+TextEditingController controllerTitulo = TextEditingController();
+TextEditingController controllerValor = TextEditingController();
+var controllerIcon = 1;
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -21,6 +22,14 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+  @override
+  void dispose() {
+    controllerIcon = 1;
+    controllerTitulo.dispose();
+    controllerValor.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -252,43 +261,228 @@ class _HomePageState extends State<HomePage> {
                     Icons.add_circle,
                     color: Colors.green,
                   ),
-                  title: const Text('Renda ou receita'),
+                  title: const Text('Entradas'),
                   onTap: () {
                     Navigator.pop(context);
-                    _configurandoModalFormBottomSheet(context);
+                    _exibirDialogEntradas(context);
                   }),
               ListTile(
                   leading: const Icon(
                     Icons.remove_circle,
                     color: Colors.red,
                   ),
-                  title: const Text('Despesa'),
+                  title: const Text('Despesas'),
                   onTap: () {
                     Navigator.pop(context);
-                    _configurandoModalFormBottomSheet(context);
+                    _exibirDialogSaidas(context);
                   }),
             ],
           );
         });
   }
 
-  void _configurandoModalFormBottomSheet(context) {
+  void _exibirDialogEntradas(context) {
     showModalBottomSheet(
         context: context,
         builder: (BuildContext context) {
-          return DialogAdd();
+          return DialogAddEntradas();
         });
+  }
+
+   void _exibirDialogSaidas(context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return DialogAddSaidas();
+        });
+  }
+
+
+
+}
+
+class DialogAddSaidas extends StatefulWidget {
+  const DialogAddSaidas({ Key? key }) : super(key: key);
+
+  @override
+  _DialogAddSaidasState createState() => _DialogAddSaidasState();
+}
+
+class _DialogAddSaidasState extends State<DialogAddSaidas> {
+
+  @override
+  void dispose() {
+    controllerIcon = 1;
+    controllerTitulo.dispose();
+    controllerValor.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    controllerIcon = 1;
+    controllerValor = TextEditingController();
+    controllerTitulo = TextEditingController();
+    super.initState();
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 32),
+        child: SizedBox(
+          height: size.height,
+          child: Column(
+            children: [
+              const Padding(
+                padding: EdgeInsets.only(top: 15, bottom: 8),
+                child: Align(
+                    alignment: Alignment.bottomLeft,
+                    child: Text(
+                      'Adicionar uma despesa',
+                      style: TextStyle(fontSize: 17),
+                    )),
+              ),
+              InputWidget(
+                labelText: "Titulo",
+                icon: Icons.message,
+                txtController: controllerTitulo,
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              InputWidget(
+                labelText: "Valor",
+                icon: Icons.monetization_on_rounded,
+                type: TextInputType.number,
+                txtController: controllerValor,
+              ),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Align(
+                    alignment: Alignment.bottomLeft,
+                    child: Text(
+                      'Escolha um icone',
+                      style: TextStyle(fontSize: 17),
+                    )),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                      onTap: () => setState(() {
+                        controllerIcon = 1;
+                      }),
+                      child: Container(
+                        height: 70,
+                        width: 90,
+                        color:
+                            controllerIcon == 1
+                                ? Colors.red
+                                : Colors.transparent,
+                        child: const Card(
+                            elevation: 1,
+                            child: Icon(Icons.water_damage_outlined)),
+                      ),
+                    ),
+                    SizedBox(
+                      width: size.width * 0.1,
+                    ),
+                    GestureDetector(
+                      onTap: () => setState(() {
+                        controllerIcon = 2;
+                      }),
+                      child: Container(
+                        height: 70,
+                        width: 90,
+                        color:
+                            controllerIcon == 2
+                                ? Colors.red
+                                : Colors.transparent,
+                        child: const Card(
+                            elevation: 1,
+                            child: Icon(Icons.money_off)),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: size.height * .05,
+              ),
+              SizedBox(
+                width: size.width,
+                height: size.height * .05,
+                child: ElevatedButton(
+                  child: const Text(
+                    'Adicionar',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  onPressed: (){
+                    
+                    String dia = "${DateTime.now().day}";
+                    String mes = "${DateTime.now().month}";
+                    if(DateTime.now().day < 10){
+                      dia = "0${DateTime.now().day}";
+                    }
+                    if(DateTime.now().month < 10){
+                      mes = "0${DateTime.now().month}";
+                    }
+                   
+                    ItemMovimentacao item = ItemMovimentacao(
+                      colorIcon: Colors.red,
+                      isDespesa: true,
+                      data: "$dia/$mes/${DateTime.now().year}",
+                      id: 0,
+                      titulo: controllerTitulo.text,
+                      valor: controllerValor.text,
+                      icon:  controllerIcon == 1 ? Icons.water_damage_outlined : Icons.money_off,
+                      );
+                    
+                    storeMov.addItemMovimentacao(item);
+                    Navigator.pop(context);                    
+                  } 
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
 
-class DialogAdd extends StatefulWidget {
-  const DialogAdd({ Key? key }) : super(key: key);
+class DialogAddEntradas extends StatefulWidget {
+  const DialogAddEntradas({ Key? key }) : super(key: key);
 
   @override
-  _DialogAddState createState() => _DialogAddState();
+  _DialogAddEntradasState createState() => _DialogAddEntradasState();
 }
 
-class _DialogAddState extends State<DialogAdd> {
+class _DialogAddEntradasState extends State<DialogAddEntradas> {  
+  
+  @override
+  void dispose() {
+    controllerIcon = 1;
+    controllerTitulo.dispose();
+    controllerValor.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    controllerIcon = 1;
+    controllerValor = TextEditingController();
+    controllerTitulo = TextEditingController();
+    super.initState();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -403,7 +597,7 @@ class _DialogAddState extends State<DialogAdd> {
                       id: 0,
                       titulo: controllerTitulo.text,
                       valor: controllerValor.text,
-                      icon:  controllerIcon == 0 ? Icons.account_balance_wallet_rounded : Icons.monetization_on_outlined,
+                      icon:  controllerIcon == 1 ? Icons.account_balance_wallet_rounded : Icons.monetization_on_outlined,
                       );
                     
                     storeMov.addItemMovimentacao(item);

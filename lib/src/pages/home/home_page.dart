@@ -112,7 +112,7 @@ class _HomePageState extends State<HomePage> {
                                         !exibirSaldo
                                             ? Padding(
                                                 padding: const EdgeInsets.only(
-                                                    bottom: 5),
+                                                    bottom: 4),
                                                 child: Container(
                                                   height: 30,
                                                   width: 100,
@@ -478,7 +478,7 @@ class _DialogAddSaidasState extends State<DialogAddSaidas> {
                       }
 
                       ItemMovimentacao item = ItemMovimentacao(
-                        colorIcon: Colors.red,
+                        colorIcon: Colors.red.shade400,
                         isDespesa: true,
                         data: "$dia/$mes/${DateTime.now().year}",
                         id: 0,

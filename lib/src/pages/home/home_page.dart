@@ -1,10 +1,17 @@
-import 'package:finances/src/controllers/movimentacao_controller.dart';
 import 'package:finances/src/models/movimentacoes.dart';
 import 'package:finances/src/pages/home/widgets/movimentacao_widget.dart';
+import 'package:finances/src/stores/movimentacoes_store.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:lottie/lottie.dart';
+import 'widgets/input_widget.dart';
 
-import 'widgets/dialog_bottom_adicionar_widget.dart';
+
+//Instancia do store    
+final storeMov = MovimentacoesStore();
+final controllerTitulo = TextEditingController();
+final controllerValor = TextEditingController();
+var controllerIcon = -1;
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -14,13 +21,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
   @override
   Widget build(BuildContext context) {
-    final MovimentacaoController controller = MovimentacaoController();
-    final List<ItemMovimentacao> _listMovimentacao = controller.getList();
-
     var _size = MediaQuery.of(context).size;
-
     return Scaffold(
       body: Column(
         children: [
@@ -71,7 +75,7 @@ class _HomePageState extends State<HomePage> {
                 top: _size.height * .18,
                 left: _size.width * .05,
                 child: SizedBox(
-                  height: 100,
+                  height: _size.height * .13,
                   width: _size.width * .9,
                   child: Card(
                     color: const Color(0xFFFF4328),
@@ -113,7 +117,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               Container(
-                height: 250,
+                height: _size.height * .32,
               )
             ],
           ),
@@ -188,34 +192,38 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                   ),
-                  SizedBox(
-                    height: _size.height * .44,
-                    child: _listMovimentacao.isNotEmpty
-                        ? ListView.builder(
-                            padding: const EdgeInsets.all(8),
-                            itemCount: _listMovimentacao.length,
-                            scrollDirection: Axis.vertical,
-                            shrinkWrap: true,
-                            itemBuilder: (BuildContext context, int index) {
-                              return ItemMovimentacaoWidget(
-                                  titulo: _listMovimentacao[index].titulo!,
-                                  data: _listMovimentacao[index].data!,
-                                  valor: _listMovimentacao[index].valor!,
-                                  icon: _listMovimentacao[index].icon!,
-                                  despesa: _listMovimentacao[index].isDespesa!,
-                                  colorIcon:
-                                      _listMovimentacao[index].colorIcon!);
-                            })
-                        : Column(
-                            children: [
-                              SizedBox(
-                                width: _size.width * .6,
-                                child: LottieBuilder.asset(
-                                    "assets/lottie/pig_animation.json"),
-                              ),
-                              const Text("Você ainda não possui movimentações"),
-                            ],
-                          ),
+                  Observer(builder: (_) =>
+                    SizedBox(
+                      height: _size.height * .44,
+                      child: storeMov.listMovimentacao.length >0
+                          ? Observer(builder: (_)=>
+                          ListView.builder(
+                              padding: const EdgeInsets.all(8),
+                              itemCount: storeMov.listMovimentacao.length,
+                              scrollDirection: Axis.vertical,
+                              shrinkWrap: true,
+                              itemBuilder: (BuildContext context, int index) {
+                                return ItemMovimentacaoWidget(
+                                    titulo: storeMov.listMovimentacao[index].titulo!,
+                                    data: storeMov.listMovimentacao[index].data!,
+                                    valor: storeMov.listMovimentacao[index].valor!,
+                                    icon: storeMov.listMovimentacao[index].icon!,
+                                    despesa: storeMov.listMovimentacao[index].isDespesa!,
+                                    colorIcon:
+                                        storeMov.listMovimentacao[index].colorIcon!);
+                              })
+                          )
+                          : Column(
+                              children: [
+                                SizedBox(
+                                  width: _size.width * .6,
+                                  child: LottieBuilder.asset(
+                                      "assets/lottie/pig_animation.json"),
+                                ),
+                                const Text("Você ainda não possui movimentações"),
+                              ],
+                            ),
+                    ),
                   ),
                 ],
               ),
@@ -268,7 +276,145 @@ class _HomePageState extends State<HomePage> {
     showModalBottomSheet(
         context: context,
         builder: (BuildContext context) {
-          return const DialogBottomAdd();
+          return DialogAdd();
         });
+  }
+}
+
+class DialogAdd extends StatefulWidget {
+  const DialogAdd({ Key? key }) : super(key: key);
+
+  @override
+  _DialogAddState createState() => _DialogAddState();
+}
+
+class _DialogAddState extends State<DialogAdd> {
+  @override
+  Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 32),
+        child: SizedBox(
+          height: size.height,
+          child: Column(
+            children: [
+              const Padding(
+                padding: EdgeInsets.only(top: 15, bottom: 8),
+                child: Align(
+                    alignment: Alignment.bottomLeft,
+                    child: Text(
+                      'Adicionar uma renda',
+                      style: TextStyle(fontSize: 17),
+                    )),
+              ),
+              InputWidget(
+                labelText: "Titulo",
+                icon: Icons.message,
+                txtController: controllerTitulo,
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              InputWidget(
+                labelText: "Valor",
+                icon: Icons.monetization_on_rounded,
+                type: TextInputType.number,
+                txtController: controllerValor,
+              ),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Align(
+                    alignment: Alignment.bottomLeft,
+                    child: Text(
+                      'Escolha um icone',
+                      style: TextStyle(fontSize: 17),
+                    )),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                      onTap: () => setState(() {
+                        controllerIcon = 1;
+                      }),
+                      child: Container(
+                        height: 70,
+                        width: 90,
+                        color:
+                            controllerIcon == 1
+                                ? Colors.red
+                                : Colors.transparent,
+                        child: const Card(
+                            elevation: 1,
+                            child: Icon(Icons.account_balance_wallet_rounded)),
+                      ),
+                    ),
+                    SizedBox(
+                      width: size.width * 0.1,
+                    ),
+                    GestureDetector(
+                      onTap: () => setState(() {
+                        controllerIcon = 2;
+                      }),
+                      child: Container(
+                        height: 70,
+                        width: 90,
+                        color:
+                            controllerIcon == 2
+                                ? Colors.red
+                                : Colors.transparent,
+                        child: const Card(
+                            elevation: 1,
+                            child: Icon(Icons.monetization_on_outlined)),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: size.height * .05,
+              ),
+              SizedBox(
+                width: size.width,
+                height: size.height * .05,
+                child: ElevatedButton(
+                  child: const Text(
+                    'Adicionar',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  onPressed: (){
+                    
+                    String dia = "${DateTime.now().day}";
+                    String mes = "${DateTime.now().month}";
+                    if(DateTime.now().day < 10){
+                      dia = "0${DateTime.now().day}";
+                    }
+                    if(DateTime.now().month < 10){
+                      mes = "0${DateTime.now().month}";
+                    }
+                   
+                    ItemMovimentacao item = ItemMovimentacao(
+                      colorIcon: Colors.green,
+                      isDespesa: false,
+                      data: "$dia/$mes/${DateTime.now().year}",
+                      id: 0,
+                      titulo: controllerTitulo.text,
+                      valor: controllerValor.text,
+                      icon:  controllerIcon == 0 ? Icons.account_balance_wallet_rounded : Icons.monetization_on_outlined,
+                      );
+                    
+                    storeMov.addItemMovimentacao(item);
+                    Navigator.pop(context);                    
+                  } 
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

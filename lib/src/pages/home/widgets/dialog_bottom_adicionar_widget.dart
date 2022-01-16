@@ -1,19 +1,34 @@
-import 'package:finances/src/controllers/movimentacao_controller.dart';
+import 'package:finances/src/models/movimentacoes.dart';
+import 'package:finances/src/stores/movimentacoes_store.dart';
 import 'package:flutter/material.dart';
 
 import 'input_widget.dart';
 
+
+
+
 class DialogBottomAdd extends StatefulWidget {
-  const DialogBottomAdd({Key? key}) : super(key: key);
+  //Instancia do store    
+  final MovimentacoesStore storeMov; 
+
+  const DialogBottomAdd({Key? key, required this.storeMov}) : super(key: key);
 
   @override
   _DialogBottomAddState createState() => _DialogBottomAddState();
 }
 
 class _DialogBottomAddState extends State<DialogBottomAdd> {
+//Instancia do store    
+final storeMov = MovimentacoesStore();
+final controllerTitulo = TextEditingController();
+final controllerValor = TextEditingController();
+var controllerIcon = -1;
+  
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { 
+  
     var size = MediaQuery.of(context).size;
+    
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 32),
@@ -33,7 +48,7 @@ class _DialogBottomAddState extends State<DialogBottomAdd> {
               InputWidget(
                 labelText: "Titulo",
                 icon: Icons.message,
-                txtController: MovimentacaoController.instance.controllerTitulo,
+                txtController: controllerTitulo,
               ),
               const SizedBox(
                 height: 10,
@@ -42,7 +57,7 @@ class _DialogBottomAddState extends State<DialogBottomAdd> {
                 labelText: "Valor",
                 icon: Icons.monetization_on_rounded,
                 type: TextInputType.number,
-                txtController: MovimentacaoController.instance.controllerValor,
+                txtController: controllerValor,
               ),
               const Padding(
                 padding: EdgeInsets.all(8.0),
@@ -60,13 +75,13 @@ class _DialogBottomAddState extends State<DialogBottomAdd> {
                   children: [
                     GestureDetector(
                       onTap: () => setState(() {
-                        MovimentacaoController.instance.controllerIcon = 1;
+                        controllerIcon = 1;
                       }),
                       child: Container(
                         height: 70,
                         width: 90,
                         color:
-                            MovimentacaoController.instance.controllerIcon == 1
+                            controllerIcon == 1
                                 ? Colors.red
                                 : Colors.transparent,
                         child: const Card(
@@ -79,13 +94,13 @@ class _DialogBottomAddState extends State<DialogBottomAdd> {
                     ),
                     GestureDetector(
                       onTap: () => setState(() {
-                        MovimentacaoController.instance.controllerIcon = 2;
+                        controllerIcon = 2;
                       }),
                       child: Container(
                         height: 70,
                         width: 90,
                         color:
-                            MovimentacaoController.instance.controllerIcon == 2
+                            controllerIcon == 2
                                 ? Colors.red
                                 : Colors.transparent,
                         child: const Card(
@@ -107,7 +122,30 @@ class _DialogBottomAddState extends State<DialogBottomAdd> {
                     'Adicionar',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: (){
+                    
+                    String dia = "${DateTime.now().day}";
+                    String mes = "${DateTime.now().month}";
+                    if(DateTime.now().day < 10){
+                      dia = "0${DateTime.now().day}";
+                    }
+                    if(DateTime.now().month < 10){
+                      mes = "0${DateTime.now().month}";
+                    }
+                   
+                    ItemMovimentacao item = ItemMovimentacao(
+                      colorIcon: Colors.green,
+                      isDespesa: false,
+                      data: "$dia/$mes/${DateTime.now().year}",
+                      id: 0,
+                      titulo: controllerTitulo.text,
+                      valor: controllerValor.text,
+                      icon:  Icons.account_balance_wallet_rounded,
+                      );
+                    
+                    storeMov.addItemMovimentacao(item);
+                    Navigator.pop(context);                    
+                  } 
                 ),
               )
             ],

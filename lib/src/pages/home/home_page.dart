@@ -4,6 +4,7 @@ import 'package:finances/src/stores/entradas_saidas/entradas_saidas_store.dart';
 import 'package:finances/src/stores/movimentacoes/movimentacoes_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:lottie/lottie.dart';
 import 'widgets/input_widget.dart';
 
@@ -257,7 +258,7 @@ class _HomePageState extends State<HomePage> {
                                   shrinkWrap: true,
                                   itemBuilder:
                                       (BuildContext context, int index) {
-                                    return ItemMovimentacaoWidget(
+                                    final item = ItemMovimentacaoWidget(
                                         titulo: storeMov
                                             .listMovimentacao[index].titulo!,
                                         data: storeMov
@@ -271,7 +272,42 @@ class _HomePageState extends State<HomePage> {
                                         colorIcon: storeMov
                                             .listMovimentacao[index]
                                             .colorIcon!);
-                                  }))
+
+                                    return Slidable(
+                                      child: item,
+                                      actionPane:
+                                          const SlidableDrawerActionPane(),
+                                      actionExtentRatio: 0.25,
+                                      actions: [
+                                        IconSlideAction(
+                                          caption: "Deletar",
+                                          icon: Icons.delete,
+                                          color: Colors.red,
+                                          foregroundColor: Colors.white,
+                                          onTap: () {
+                                            double valor = double.parse(storeMov
+                                                .listMovimentacao[index]
+                                                .valor!);
+
+                                            valor = valor * -1;
+                                            if (storeMov.listMovimentacao[index]
+                                                .isDespesa!) {
+                                              storeSaldo.addSaidas(valor);
+                                            } else {
+                                              storeSaldo.addEntradas(valor);
+                                            }
+                                            storeSaldo.atualizarSaldo();
+
+                                            //Tirar da lista
+                                            storeMov.removeItemMovimentacao(
+                                                storeMov
+                                                    .listMovimentacao[index]);
+                                          },
+                                        )
+                                      ],
+                                    );
+                                  }),
+                            )
                           : Column(
                               children: [
                                 SizedBox(
@@ -586,8 +622,9 @@ class _DialogAddEntradasState extends State<DialogAddEntradas> {
                             ? Colors.red
                             : Colors.transparent,
                         child: const Card(
-                            elevation: 1,
-                            child: Icon(Icons.account_balance_wallet_rounded)),
+                          elevation: 1,
+                          child: Icon(Icons.account_balance_wallet_rounded),
+                        ),
                       ),
                     ),
                     SizedBox(

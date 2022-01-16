@@ -1,5 +1,6 @@
 import 'package:finances/src/models/movimentacoes.dart';
 import 'package:finances/src/pages/home/widgets/movimentacao_widget.dart';
+import 'package:finances/src/stores/entradas_saidas/entradas_saidas_store.dart';
 import 'package:finances/src/stores/movimentacoes/movimentacoes_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -9,6 +10,7 @@ import 'widgets/input_widget.dart';
 
 //Instancia dos stores    
 final storeMov = MovimentacoesStore();
+final storeSaldo = EntradasSaidas();
 
 TextEditingController controllerTitulo = TextEditingController();
 TextEditingController controllerValor = TextEditingController();
@@ -93,17 +95,19 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         Column(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: const [
-                            Text(
+                          children: [
+                            const Text(
                               "Saldo disponível",
                               style: TextStyle(color: Colors.white),
                             ),
-                            Text(
-                              "R\$ 0,00",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.w700),
+                            Observer(builder: (context)=>
+                              Text(
+                                "R\$ ${storeSaldo.saldo.toStringAsFixed(2)}",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.w700),
+                              ),
                             ),
                           ],
                         ),
@@ -153,14 +157,16 @@ class _HomePageState extends State<HomePage> {
                       elevation: 5,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Text("Entradas"),
-                          Text(
-                            "R\$ 0,00",
+                        children: [
+                          const Text("Entradas"),
+                          Observer(builder: (context)=>
+                            Text(
+                            "R\$ ${storeSaldo.entradasTotal.toStringAsFixed(2)}",
                             style: TextStyle(
                                 color: Colors.green,
                                 fontWeight: FontWeight.w700),
-                          ),
+                            ),
+                          ),       
                         ],
                       ),
                     ),
@@ -172,12 +178,14 @@ class _HomePageState extends State<HomePage> {
                       elevation: 5,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Text("Saidas"),
-                          Text("R\$ 0,00",
+                        children:  [
+                          const Text("Saidas"),
+                          Observer(builder: (context)=>
+                            Text("R\$ ${storeSaldo.saidasTotal.toStringAsFixed(2)}",
                               style: TextStyle(
                                   color: Colors.red,
-                                  fontWeight: FontWeight.w700)),
+                                  fontWeight: FontWeight.w700),),
+                          ),
                         ],
                       ),
                     ),
@@ -445,6 +453,9 @@ class _DialogAddSaidasState extends State<DialogAddSaidas> {
                       );
                     
                     storeMov.addItemMovimentacao(item);
+                    double valor = double.parse(controllerValor.text);
+                    storeSaldo.addSaidas(valor);
+                    storeSaldo.atualizarSaldo();
                     Navigator.pop(context);                    
                   } 
                 ),
@@ -601,6 +612,10 @@ class _DialogAddEntradasState extends State<DialogAddEntradas> {
                       );
                     
                     storeMov.addItemMovimentacao(item);
+                    double valor = double.parse(controllerValor.text);
+                    storeSaldo.addEntradas(valor);
+                    storeSaldo.atualizarSaldo();
+                    
                     Navigator.pop(context);                    
                   } 
                 ),

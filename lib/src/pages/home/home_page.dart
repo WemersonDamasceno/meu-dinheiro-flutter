@@ -7,8 +7,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:lottie/lottie.dart';
 import 'widgets/input_widget.dart';
 
-
-//Instancia dos stores    
+//Instancia dos stores
 final storeMov = MovimentacoesStore();
 final storeSaldo = EntradasSaidas();
 
@@ -24,7 +23,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
+  bool exibirSaldo = false;
   @override
   void dispose() {
     controllerIcon = 1;
@@ -100,15 +99,40 @@ class _HomePageState extends State<HomePage> {
                               "Saldo disponível",
                               style: TextStyle(color: Colors.white),
                             ),
-                            Observer(builder: (context)=>
-                              Text(
-                                "R\$ ${storeSaldo.saldo.toStringAsFixed(2)}",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 22,
-                                    fontWeight: FontWeight.w700),
-                              ),
-                            ),
+                            Observer(
+                                builder: (context) => Row(
+                                      children: [
+                                        Text(
+                                          "R\$ ",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.w700),
+                                        ),
+                                        !exibirSaldo
+                                            ? Padding(
+                                                padding: const EdgeInsets.only(
+                                                    bottom: 5),
+                                                child: Container(
+                                                  height: 30,
+                                                  width: 100,
+                                                  child: Text(
+                                                    "${storeSaldo.saldo.toStringAsFixed(2)}",
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 20,
+                                                        fontWeight:
+                                                            FontWeight.w700),
+                                                  ),
+                                                ),
+                                              )
+                                            : Container(
+                                                height: 20,
+                                                width: 100,
+                                                color: Colors.red.shade200,
+                                              )
+                                      ],
+                                    )),
                           ],
                         ),
                         const SizedBox(
@@ -116,12 +140,22 @@ class _HomePageState extends State<HomePage> {
                         ),
                         Column(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: const [
-                            Icon(
+                          children: [
+                            const Icon(
                               Icons.account_balance_wallet_outlined,
                               color: Colors.white,
                             ),
-                            Icon(Icons.visibility_off, color: Colors.white),
+                            IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    exibirSaldo = !exibirSaldo;
+                                  });
+                                },
+                                icon: exibirSaldo
+                                    ? Icon(Icons.visibility_off,
+                                        color: Colors.white)
+                                    : Icon(Icons.visibility_rounded,
+                                        color: Colors.white))
                           ],
                         )
                       ],
@@ -152,39 +186,41 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   SizedBox(
                     height: 80,
-                    width: _size.width * .4,
+                    width: _size.width * .5,
                     child: Card(
                       elevation: 5,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const Text("Entradas"),
-                          Observer(builder: (context)=>
-                            Text(
-                            "R\$ ${storeSaldo.entradasTotal.toStringAsFixed(2)}",
-                            style: TextStyle(
-                                color: Colors.green,
-                                fontWeight: FontWeight.w700),
+                          Observer(
+                            builder: (context) => Text(
+                              "R\$ ${storeSaldo.entradasTotal.toStringAsFixed(2)}",
+                              style: TextStyle(
+                                  color: Colors.green,
+                                  fontWeight: FontWeight.w700),
                             ),
-                          ),       
+                          ),
                         ],
                       ),
                     ),
                   ),
                   SizedBox(
                     height: 80,
-                    width: _size.width * .4,
+                    width: _size.width * .5,
                     child: Card(
                       elevation: 5,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children:  [
+                        children: [
                           const Text("Saidas"),
-                          Observer(builder: (context)=>
-                            Text("R\$ ${storeSaldo.saidasTotal.toStringAsFixed(2)}",
+                          Observer(
+                            builder: (context) => Text(
+                              "R\$ ${storeSaldo.saidasTotal.toStringAsFixed(2)}",
                               style: TextStyle(
                                   color: Colors.red,
-                                  fontWeight: FontWeight.w700),),
+                                  fontWeight: FontWeight.w700),
+                            ),
                           ),
                         ],
                       ),
@@ -209,27 +245,33 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                   ),
-                  Observer(builder: (_) =>
-                    SizedBox(
+                  Observer(
+                    builder: (_) => SizedBox(
                       height: _size.height * .44,
-                      child: storeMov.listMovimentacao.length >0
-                          ? Observer(builder: (_)=>
-                          ListView.builder(
-                              padding: const EdgeInsets.all(8),
-                              itemCount: storeMov.listMovimentacao.length,
-                              scrollDirection: Axis.vertical,
-                              shrinkWrap: true,
-                              itemBuilder: (BuildContext context, int index) {
-                                return ItemMovimentacaoWidget(
-                                    titulo: storeMov.listMovimentacao[index].titulo!,
-                                    data: storeMov.listMovimentacao[index].data!,
-                                    valor: storeMov.listMovimentacao[index].valor!,
-                                    icon: storeMov.listMovimentacao[index].icon!,
-                                    despesa: storeMov.listMovimentacao[index].isDespesa!,
-                                    colorIcon:
-                                        storeMov.listMovimentacao[index].colorIcon!);
-                              })
-                          )
+                      child: storeMov.listMovimentacao.length > 0
+                          ? Observer(
+                              builder: (_) => ListView.builder(
+                                  padding: const EdgeInsets.all(8),
+                                  itemCount: storeMov.listMovimentacao.length,
+                                  scrollDirection: Axis.vertical,
+                                  shrinkWrap: true,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return ItemMovimentacaoWidget(
+                                        titulo: storeMov
+                                            .listMovimentacao[index].titulo!,
+                                        data: storeMov
+                                            .listMovimentacao[index].data!,
+                                        valor: storeMov
+                                            .listMovimentacao[index].valor!,
+                                        icon: storeMov
+                                            .listMovimentacao[index].icon!,
+                                        despesa: storeMov
+                                            .listMovimentacao[index].isDespesa!,
+                                        colorIcon: storeMov
+                                            .listMovimentacao[index]
+                                            .colorIcon!);
+                                  }))
                           : Column(
                               children: [
                                 SizedBox(
@@ -237,7 +279,8 @@ class _HomePageState extends State<HomePage> {
                                   child: LottieBuilder.asset(
                                       "assets/lottie/pig_animation.json"),
                                 ),
-                                const Text("Você ainda não possui movimentações"),
+                                const Text(
+                                    "Você ainda não possui movimentações"),
                               ],
                             ),
                     ),
@@ -297,27 +340,23 @@ class _HomePageState extends State<HomePage> {
         });
   }
 
-   void _exibirDialogSaidas(context) {
+  void _exibirDialogSaidas(context) {
     showModalBottomSheet(
         context: context,
         builder: (BuildContext context) {
           return DialogAddSaidas();
         });
   }
-
-
-
 }
 
 class DialogAddSaidas extends StatefulWidget {
-  const DialogAddSaidas({ Key? key }) : super(key: key);
+  const DialogAddSaidas({Key? key}) : super(key: key);
 
   @override
   _DialogAddSaidasState createState() => _DialogAddSaidasState();
 }
 
 class _DialogAddSaidasState extends State<DialogAddSaidas> {
-
   @override
   void dispose() {
     controllerIcon = 1;
@@ -333,7 +372,6 @@ class _DialogAddSaidasState extends State<DialogAddSaidas> {
     controllerTitulo = TextEditingController();
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -389,10 +427,9 @@ class _DialogAddSaidasState extends State<DialogAddSaidas> {
                       child: Container(
                         height: 70,
                         width: 90,
-                        color:
-                            controllerIcon == 1
-                                ? Colors.red
-                                : Colors.transparent,
+                        color: controllerIcon == 1
+                            ? Colors.red
+                            : Colors.transparent,
                         child: const Card(
                             elevation: 1,
                             child: Icon(Icons.water_damage_outlined)),
@@ -408,13 +445,11 @@ class _DialogAddSaidasState extends State<DialogAddSaidas> {
                       child: Container(
                         height: 70,
                         width: 90,
-                        color:
-                            controllerIcon == 2
-                                ? Colors.red
-                                : Colors.transparent,
+                        color: controllerIcon == 2
+                            ? Colors.red
+                            : Colors.transparent,
                         child: const Card(
-                            elevation: 1,
-                            child: Icon(Icons.money_off)),
+                            elevation: 1, child: Icon(Icons.money_off)),
                       ),
                     ),
                   ],
@@ -427,38 +462,39 @@ class _DialogAddSaidasState extends State<DialogAddSaidas> {
                 width: size.width,
                 height: size.height * .05,
                 child: ElevatedButton(
-                  child: const Text(
-                    'Adicionar',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-                  onPressed: (){
-                    
-                    String dia = "${DateTime.now().day}";
-                    String mes = "${DateTime.now().month}";
-                    if(DateTime.now().day < 10){
-                      dia = "0${DateTime.now().day}";
-                    }
-                    if(DateTime.now().month < 10){
-                      mes = "0${DateTime.now().month}";
-                    }
-                   
-                    ItemMovimentacao item = ItemMovimentacao(
-                      colorIcon: Colors.red,
-                      isDespesa: true,
-                      data: "$dia/$mes/${DateTime.now().year}",
-                      id: 0,
-                      titulo: controllerTitulo.text,
-                      valor: controllerValor.text,
-                      icon:  controllerIcon == 1 ? Icons.water_damage_outlined : Icons.money_off,
+                    child: const Text(
+                      'Adicionar',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    onPressed: () {
+                      String dia = "${DateTime.now().day}";
+                      String mes = "${DateTime.now().month}";
+                      if (DateTime.now().day < 10) {
+                        dia = "0${DateTime.now().day}";
+                      }
+                      if (DateTime.now().month < 10) {
+                        mes = "0${DateTime.now().month}";
+                      }
+
+                      ItemMovimentacao item = ItemMovimentacao(
+                        colorIcon: Colors.red,
+                        isDespesa: true,
+                        data: "$dia/$mes/${DateTime.now().year}",
+                        id: 0,
+                        titulo: controllerTitulo.text,
+                        valor: controllerValor.text,
+                        icon: controllerIcon == 1
+                            ? Icons.water_damage_outlined
+                            : Icons.money_off,
                       );
-                    
-                    storeMov.addItemMovimentacao(item);
-                    double valor = double.parse(controllerValor.text);
-                    storeSaldo.addSaidas(valor);
-                    storeSaldo.atualizarSaldo();
-                    Navigator.pop(context);                    
-                  } 
-                ),
+
+                      storeMov.addItemMovimentacao(item);
+                      double valor = double.parse(controllerValor.text);
+                      storeSaldo.addSaidas(valor);
+                      storeSaldo.atualizarSaldo();
+                      Navigator.pop(context);
+                    }),
               )
             ],
           ),
@@ -469,14 +505,13 @@ class _DialogAddSaidasState extends State<DialogAddSaidas> {
 }
 
 class DialogAddEntradas extends StatefulWidget {
-  const DialogAddEntradas({ Key? key }) : super(key: key);
+  const DialogAddEntradas({Key? key}) : super(key: key);
 
   @override
   _DialogAddEntradasState createState() => _DialogAddEntradasState();
 }
 
-class _DialogAddEntradasState extends State<DialogAddEntradas> {  
-  
+class _DialogAddEntradasState extends State<DialogAddEntradas> {
   @override
   void dispose() {
     controllerIcon = 1;
@@ -492,7 +527,6 @@ class _DialogAddEntradasState extends State<DialogAddEntradas> {
     controllerTitulo = TextEditingController();
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -548,10 +582,9 @@ class _DialogAddEntradasState extends State<DialogAddEntradas> {
                       child: Container(
                         height: 70,
                         width: 90,
-                        color:
-                            controllerIcon == 1
-                                ? Colors.red
-                                : Colors.transparent,
+                        color: controllerIcon == 1
+                            ? Colors.red
+                            : Colors.transparent,
                         child: const Card(
                             elevation: 1,
                             child: Icon(Icons.account_balance_wallet_rounded)),
@@ -567,10 +600,9 @@ class _DialogAddEntradasState extends State<DialogAddEntradas> {
                       child: Container(
                         height: 70,
                         width: 90,
-                        color:
-                            controllerIcon == 2
-                                ? Colors.red
-                                : Colors.transparent,
+                        color: controllerIcon == 2
+                            ? Colors.red
+                            : Colors.transparent,
                         child: const Card(
                             elevation: 1,
                             child: Icon(Icons.monetization_on_outlined)),
@@ -586,39 +618,40 @@ class _DialogAddEntradasState extends State<DialogAddEntradas> {
                 width: size.width,
                 height: size.height * .05,
                 child: ElevatedButton(
-                  child: const Text(
-                    'Adicionar',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-                  onPressed: (){
-                    
-                    String dia = "${DateTime.now().day}";
-                    String mes = "${DateTime.now().month}";
-                    if(DateTime.now().day < 10){
-                      dia = "0${DateTime.now().day}";
-                    }
-                    if(DateTime.now().month < 10){
-                      mes = "0${DateTime.now().month}";
-                    }
-                   
-                    ItemMovimentacao item = ItemMovimentacao(
-                      colorIcon: Colors.green,
-                      isDespesa: false,
-                      data: "$dia/$mes/${DateTime.now().year}",
-                      id: 0,
-                      titulo: controllerTitulo.text,
-                      valor: controllerValor.text,
-                      icon:  controllerIcon == 1 ? Icons.account_balance_wallet_rounded : Icons.monetization_on_outlined,
+                    child: const Text(
+                      'Adicionar',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    onPressed: () {
+                      String dia = "${DateTime.now().day}";
+                      String mes = "${DateTime.now().month}";
+                      if (DateTime.now().day < 10) {
+                        dia = "0${DateTime.now().day}";
+                      }
+                      if (DateTime.now().month < 10) {
+                        mes = "0${DateTime.now().month}";
+                      }
+
+                      ItemMovimentacao item = ItemMovimentacao(
+                        colorIcon: Colors.green,
+                        isDespesa: false,
+                        data: "$dia/$mes/${DateTime.now().year}",
+                        id: 0,
+                        titulo: controllerTitulo.text,
+                        valor: controllerValor.text,
+                        icon: controllerIcon == 1
+                            ? Icons.account_balance_wallet_rounded
+                            : Icons.monetization_on_outlined,
                       );
-                    
-                    storeMov.addItemMovimentacao(item);
-                    double valor = double.parse(controllerValor.text);
-                    storeSaldo.addEntradas(valor);
-                    storeSaldo.atualizarSaldo();
-                    
-                    Navigator.pop(context);                    
-                  } 
-                ),
+
+                      storeMov.addItemMovimentacao(item);
+                      double valor = double.parse(controllerValor.text);
+                      storeSaldo.addEntradas(valor);
+                      storeSaldo.atualizarSaldo();
+
+                      Navigator.pop(context);
+                    }),
               )
             ],
           ),

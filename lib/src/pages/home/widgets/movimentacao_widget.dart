@@ -60,10 +60,10 @@ class ItemMovimentacaoWidget extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(right: 5),
               child: despesa
-                  ? Text("- $valor",
+                  ? Text("- ${valor+".00"}",
                       style: const TextStyle(
                           fontSize: 15, fontWeight: FontWeight.w800))
-                  : Text("+ $valor",
+                  : Text("+ ${valor+".00"}",
                       style: const TextStyle(
                           fontSize: 15, fontWeight: FontWeight.w800)),
             ),

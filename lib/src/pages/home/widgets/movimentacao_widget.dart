@@ -6,7 +6,6 @@ class ItemMovimentacaoWidget extends StatelessWidget {
   final String data;
   final String valor;
   final bool despesa;
-  final Color colorIcon;
   const ItemMovimentacaoWidget({
     Key? key,
     required this.titulo,
@@ -14,7 +13,6 @@ class ItemMovimentacaoWidget extends StatelessWidget {
     required this.valor,
     required this.icon,
     required this.despesa,
-    required this.colorIcon,
   }) : super(key: key);
 
   @override
@@ -38,7 +36,7 @@ class ItemMovimentacaoWidget extends StatelessWidget {
                     ),
                     onPressed: () {},
                     style: ElevatedButton.styleFrom(
-                      primary: colorIcon,
+                      primary: despesa ? Colors.red.shade400 : Colors.green,
                       shape: const CircleBorder(),
                     ),
                   ),
@@ -60,10 +58,10 @@ class ItemMovimentacaoWidget extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(right: 5),
               child: despesa
-                  ? Text("- ${valor+".00"}",
+                  ? Text("- ${valor + ".00"}",
                       style: const TextStyle(
                           fontSize: 15, fontWeight: FontWeight.w800))
-                  : Text("+ ${valor+".00"}",
+                  : Text("+ ${valor + ".00"}",
                       style: const TextStyle(
                           fontSize: 15, fontWeight: FontWeight.w800)),
             ),

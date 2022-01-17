@@ -1,3 +1,4 @@
+import 'package:finances/src/helpers/db_Provider.dart';
 import 'package:finances/src/models/movimentacoes.dart';
 import 'package:finances/src/pages/home/widgets/movimentacao_widget.dart';
 import 'package:finances/src/stores/entradas_saidas/entradas_saidas_store.dart';
@@ -12,6 +13,10 @@ import 'widgets/input_widget.dart';
 final storeMov = MovimentacoesStore();
 final storeSaldo = EntradasSaidas();
 
+//instancia do SQLite
+MovimentacoesDbProvider dbSQLite = MovimentacoesDbProvider();
+
+//Controller dos inputs
 TextEditingController controllerTitulo = TextEditingController();
 TextEditingController controllerValor = TextEditingController();
 var controllerIcon = 1;
@@ -25,12 +30,41 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   bool exibirSaldo = false;
+  var movimentacoes = [];
+
   @override
   void dispose() {
     controllerIcon = 1;
     controllerTitulo.dispose();
     controllerValor.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    buscarMovimentacoesNoSQLite();
+    super.initState();
+  }
+
+  buscarMovimentacoesNoSQLite() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    movimentacoes = await dbSQLite.buscarMovimentacoes();
+    if (movimentacoes.length > 0) {
+      movimentacoes.forEach((element) {
+        storeMov.addItemMovimentacao(element);
+      });
+
+      storeMov.listMovimentacao.forEach((item) {
+        double valor = double.parse(item.valor!);
+        if (item.isDespesa!) {
+          storeSaldo.addSaidas(valor);
+        } else {
+          storeSaldo.addEntradas(valor);
+        }
+      });
+
+      storeSaldo.atualizarSaldo();
+    }
   }
 
   @override
@@ -259,19 +293,17 @@ class _HomePageState extends State<HomePage> {
                                   itemBuilder:
                                       (BuildContext context, int index) {
                                     final item = ItemMovimentacaoWidget(
-                                        titulo: storeMov
-                                            .listMovimentacao[index].titulo!,
-                                        data: storeMov
-                                            .listMovimentacao[index].data!,
-                                        valor: storeMov
-                                            .listMovimentacao[index].valor!,
-                                        icon: storeMov
-                                            .listMovimentacao[index].icon!,
-                                        despesa: storeMov
-                                            .listMovimentacao[index].isDespesa!,
-                                        colorIcon: storeMov
-                                            .listMovimentacao[index]
-                                            .colorIcon!);
+                                      titulo: storeMov
+                                          .listMovimentacao[index].titulo!,
+                                      data: storeMov
+                                          .listMovimentacao[index].data!,
+                                      valor: storeMov
+                                          .listMovimentacao[index].valor!,
+                                      icon: storeMov
+                                          .listMovimentacao[index].icon!,
+                                      despesa: storeMov
+                                          .listMovimentacao[index].isDespesa!,
+                                    );
 
                                     return Slidable(
                                       child: item,
@@ -284,7 +316,7 @@ class _HomePageState extends State<HomePage> {
                                           icon: Icons.delete,
                                           color: Colors.red,
                                           foregroundColor: Colors.white,
-                                          onTap: () {
+                                          onTap: () async {
                                             double valor = double.parse(storeMov
                                                 .listMovimentacao[index]
                                                 .valor!);
@@ -297,6 +329,10 @@ class _HomePageState extends State<HomePage> {
                                               storeSaldo.addEntradas(valor);
                                             }
                                             storeSaldo.atualizarSaldo();
+                                            //remover do banco
+                                            await dbSQLite.deletarMovimentacoes(
+                                                storeMov.listMovimentacao[index]
+                                                    .id!);
 
                                             //Tirar da lista
                                             storeMov.removeItemMovimentacao(
@@ -503,7 +539,7 @@ class _DialogAddSaidasState extends State<DialogAddSaidas> {
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
-                    onPressed: () {
+                    onPressed: () async {
                       String dia = "${DateTime.now().day}";
                       String mes = "${DateTime.now().month}";
                       if (DateTime.now().day < 10) {
@@ -513,11 +549,18 @@ class _DialogAddSaidasState extends State<DialogAddSaidas> {
                         mes = "0${DateTime.now().month}";
                       }
 
-                      ItemMovimentacao item = ItemMovimentacao(
-                        colorIcon: Colors.red.shade400,
+                      int? idItem = 0;
+
+                      if (storeMov.listMovimentacao.isEmpty) {
+                        idItem = 0;
+                      } else {
+                        idItem = storeMov.listMovimentacao.last.id! + 1;
+                      }
+
+                      final item = ItemMovimentacao(
                         isDespesa: true,
                         data: "$dia/$mes/${DateTime.now().year}",
-                        id: 0,
+                        id: idItem,
                         titulo: controllerTitulo.text,
                         valor: controllerValor.text,
                         icon: controllerIcon == 1
@@ -525,7 +568,12 @@ class _DialogAddSaidasState extends State<DialogAddSaidas> {
                             : Icons.money_off,
                       );
 
+                      //Metodo do store para adicionar na lista
                       storeMov.addItemMovimentacao(item);
+
+                      //Salvar no bd
+                      await dbSQLite.addItem(item);
+
                       double valor = double.parse(controllerValor.text);
                       storeSaldo.addSaidas(valor);
                       storeSaldo.atualizarSaldo();
@@ -660,7 +708,7 @@ class _DialogAddEntradasState extends State<DialogAddEntradas> {
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
-                    onPressed: () {
+                    onPressed: () async {
                       String dia = "${DateTime.now().day}";
                       String mes = "${DateTime.now().month}";
                       if (DateTime.now().day < 10) {
@@ -670,11 +718,17 @@ class _DialogAddEntradasState extends State<DialogAddEntradas> {
                         mes = "0${DateTime.now().month}";
                       }
 
+                      int? idItem = 0;
+
+                      if (storeMov.listMovimentacao.isEmpty) {
+                        idItem = 0;
+                      } else {
+                        idItem = storeMov.listMovimentacao.last.id! + 1;
+                      }
                       ItemMovimentacao item = ItemMovimentacao(
-                        colorIcon: Colors.green,
                         isDespesa: false,
                         data: "$dia/$mes/${DateTime.now().year}",
-                        id: 0,
+                        id: idItem,
                         titulo: controllerTitulo.text,
                         valor: controllerValor.text,
                         icon: controllerIcon == 1
@@ -683,6 +737,9 @@ class _DialogAddEntradasState extends State<DialogAddEntradas> {
                       );
 
                       storeMov.addItemMovimentacao(item);
+                      //Salvar no bd
+                      await dbSQLite.addItem(item);
+
                       double valor = double.parse(controllerValor.text);
                       storeSaldo.addEntradas(valor);
                       storeSaldo.atualizarSaldo();

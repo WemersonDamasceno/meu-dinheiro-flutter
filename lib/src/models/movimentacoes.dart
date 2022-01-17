@@ -11,7 +11,6 @@ class ItemMovimentacao {
 
   ItemMovimentacao({
     required this.id,
-    required this.colorIcon,
     required this.titulo,
     required this.data,
     required this.valor,
@@ -20,25 +19,35 @@ class ItemMovimentacao {
   });
 
   Map<String, dynamic> toMap() {
+    int despesa = isDespesa! ? 0 : 1;
+    int code = icon!.codePoint;
+
     var map = <String, dynamic>{
       'id': id,
       'titulo': titulo,
       'data': data,
       'valor': valor,
-      'colorIcon': colorIcon,
-      'isDespesa': isDespesa,
-      'icon': icon,
+      'isDespesa': despesa,
+      'icon': code,
     };
     return map;
   }
 
   ItemMovimentacao.fromMap(Map<String, dynamic> map) {
+    int despesa = map['isDespesa'];
+    int code = map['icon'];
+
     id = map['id'];
     titulo = map['titulo'];
     data = map['data'];
     valor = map['valor'];
-    colorIcon = map['colorIcon'];
-    isDespesa = map['isDespesa'];
-    icon = map['icon'];
+    isDespesa = despesa == 0 ? true : false;
+    icon = IconData(code, fontFamily: 'MaterialIcons');
+  }
+
+  @override
+  String toString() {
+    // TODO: implement toString
+    return super.toString();
   }
 }

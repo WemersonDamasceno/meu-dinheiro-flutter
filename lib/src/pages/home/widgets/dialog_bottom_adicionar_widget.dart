@@ -4,12 +4,9 @@ import 'package:flutter/material.dart';
 
 import 'input_widget.dart';
 
-
-
-
 class DialogBottomAdd extends StatefulWidget {
-  //Instancia do store    
-  final MovimentacoesStore storeMov; 
+  //Instancia do store
+  final MovimentacoesStore storeMov;
 
   const DialogBottomAdd({Key? key, required this.storeMov}) : super(key: key);
 
@@ -18,17 +15,16 @@ class DialogBottomAdd extends StatefulWidget {
 }
 
 class _DialogBottomAddState extends State<DialogBottomAdd> {
-//Instancia do store    
-final storeMov = MovimentacoesStore();
-final controllerTitulo = TextEditingController();
-final controllerValor = TextEditingController();
-var controllerIcon = -1;
-  
+//Instancia do store
+  final storeMov = MovimentacoesStore();
+  final controllerTitulo = TextEditingController();
+  final controllerValor = TextEditingController();
+  var controllerIcon = -1;
+
   @override
-  Widget build(BuildContext context) { 
-  
+  Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    
+
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 32),
@@ -80,10 +76,9 @@ var controllerIcon = -1;
                       child: Container(
                         height: 70,
                         width: 90,
-                        color:
-                            controllerIcon == 1
-                                ? Colors.red
-                                : Colors.transparent,
+                        color: controllerIcon == 1
+                            ? Colors.red
+                            : Colors.transparent,
                         child: const Card(
                             elevation: 1,
                             child: Icon(Icons.account_balance_wallet_rounded)),
@@ -99,10 +94,9 @@ var controllerIcon = -1;
                       child: Container(
                         height: 70,
                         width: 90,
-                        color:
-                            controllerIcon == 2
-                                ? Colors.red
-                                : Colors.transparent,
+                        color: controllerIcon == 2
+                            ? Colors.red
+                            : Colors.transparent,
                         child: const Card(
                             elevation: 1,
                             child: Icon(Icons.monetization_on_outlined)),
@@ -118,35 +112,33 @@ var controllerIcon = -1;
                 width: size.width,
                 height: size.height * .05,
                 child: ElevatedButton(
-                  child: const Text(
-                    'Adicionar',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-                  onPressed: (){
-                    
-                    String dia = "${DateTime.now().day}";
-                    String mes = "${DateTime.now().month}";
-                    if(DateTime.now().day < 10){
-                      dia = "0${DateTime.now().day}";
-                    }
-                    if(DateTime.now().month < 10){
-                      mes = "0${DateTime.now().month}";
-                    }
-                   
-                    ItemMovimentacao item = ItemMovimentacao(
-                      colorIcon: Colors.green,
-                      isDespesa: false,
-                      data: "$dia/$mes/${DateTime.now().year}",
-                      id: 0,
-                      titulo: controllerTitulo.text,
-                      valor: controllerValor.text,
-                      icon:  Icons.account_balance_wallet_rounded,
+                    child: const Text(
+                      'Adicionar',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    onPressed: () {
+                      String dia = "${DateTime.now().day}";
+                      String mes = "${DateTime.now().month}";
+                      if (DateTime.now().day < 10) {
+                        dia = "0${DateTime.now().day}";
+                      }
+                      if (DateTime.now().month < 10) {
+                        mes = "0${DateTime.now().month}";
+                      }
+
+                      ItemMovimentacao item = ItemMovimentacao(
+                        isDespesa: false,
+                        data: "$dia/$mes/${DateTime.now().year}",
+                        id: 0,
+                        titulo: controllerTitulo.text,
+                        valor: controllerValor.text,
+                        icon: Icons.account_balance_wallet_rounded,
                       );
-                    
-                    storeMov.addItemMovimentacao(item);
-                    Navigator.pop(context);                    
-                  } 
-                ),
+
+                      storeMov.addItemMovimentacao(item);
+                      Navigator.pop(context);
+                    }),
               )
             ],
           ),

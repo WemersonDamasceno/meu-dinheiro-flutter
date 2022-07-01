@@ -1,5 +1,4 @@
 <p align="center">
- <img width="150" src="https://user-images.githubusercontent.com/37156004/149675320-3509ca15-0990-420e-bb99-3d99b854699b.png" align="center" alt="GitHub Readme Stats" />
  <h2 align="center">Meu Dinheiro</h2>
  <p align="center">Um app para gerenciar seus gastos
 

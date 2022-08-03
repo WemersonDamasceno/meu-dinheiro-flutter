@@ -1,6 +1,0 @@
-{
-    "dart.hotReloadOnSave": "manual",
-    "emmet.showSuggestionsAsSnippets": true,
-    "emmet.triggerExpansionOnTab": true,
-    "editor.formatOnSave": true
-}

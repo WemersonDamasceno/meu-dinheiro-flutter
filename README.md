@@ -14,4 +14,21 @@
 
   
 ---
+
+ <h1> Como usar </h1>
+Antes de tudo, configure o ambiente Flutter da sua maquina, veja mais em https://flutter.dev/docs/get-started/install
+
+- Faça o clone do repositório:
+$ git clone https://github.com/WemersonDamasceno/Meu-Dinheiro-Flutter.git
+
+- Entre na pasta:
+$ cd Meu-Dinheiro-Flutter
+
+- Instale as dependencias:
+$ flutter pub get
+
+- Execute o App com o comando: 
+$ flutter run
+
+
 Made with :heart: and Flutter.

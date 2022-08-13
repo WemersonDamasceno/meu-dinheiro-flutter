@@ -10,8 +10,8 @@
 
 # Telas implementadas
 
+![grav-01](https://user-images.githubusercontent.com/37156004/184501443-b96585a2-3419-457d-b928-834d6c7cc30d.gif)
 
-<img src="https://user-images.githubusercontent.com/37156004/145742086-b78a0532-9924-4f2e-a600-db2431de9e1c.gif" width="250"/>
-  <img src="https://user-images.githubusercontent.com/37156004/145741734-6e82cdc5-dbf5-4e10-a4c8-4c905bd13a87.gif" width="250"/>
+  
 ---
 Made with :heart: and Flutter.

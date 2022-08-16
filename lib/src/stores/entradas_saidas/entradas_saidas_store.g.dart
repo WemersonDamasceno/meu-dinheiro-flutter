@@ -6,10 +6,11 @@ part of 'entradas_saidas_store.dart';
 // StoreGenerator
 // **************************************************************************
 
-// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
+// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$EntradasSaidas on _EntradasSaidas, Store {
-  final _$saldoAtom = Atom(name: '_EntradasSaidas.saldo');
+  late final _$saldoAtom =
+      Atom(name: '_EntradasSaidas.saldo', context: context);
 
   @override
   double get saldo {
@@ -24,7 +25,8 @@ mixin _$EntradasSaidas on _EntradasSaidas, Store {
     });
   }
 
-  final _$entradasTotalAtom = Atom(name: '_EntradasSaidas.entradasTotal');
+  late final _$entradasTotalAtom =
+      Atom(name: '_EntradasSaidas.entradasTotal', context: context);
 
   @override
   double get entradasTotal {
@@ -39,7 +41,8 @@ mixin _$EntradasSaidas on _EntradasSaidas, Store {
     });
   }
 
-  final _$saidasTotalAtom = Atom(name: '_EntradasSaidas.saidasTotal');
+  late final _$saidasTotalAtom =
+      Atom(name: '_EntradasSaidas.saidasTotal', context: context);
 
   @override
   double get saidasTotal {
@@ -54,8 +57,8 @@ mixin _$EntradasSaidas on _EntradasSaidas, Store {
     });
   }
 
-  final _$_EntradasSaidasActionController =
-      ActionController(name: '_EntradasSaidas');
+  late final _$_EntradasSaidasActionController =
+      ActionController(name: '_EntradasSaidas', context: context);
 
   @override
   dynamic addEntradas(double valor) {

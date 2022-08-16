@@ -44,10 +44,4 @@ class ItemMovimentacao {
     isDespesa = despesa == 0 ? true : false;
     icon = IconData(code, fontFamily: 'MaterialIcons');
   }
-
-  @override
-  String toString() {
-    // TODO: implement toString
-    return super.toString();
-  }
 }

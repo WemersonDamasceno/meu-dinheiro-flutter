@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:finances/src/helpers/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
@@ -16,8 +17,13 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
     return Timer(_duration, navigationPage);
   }
 
-  void navigationPage() {
-    Navigator.popAndPushNamed(context, "/home");
+  void navigationPage() async {
+    String? name = await SharedPref().read("name");
+    if (name != null) {
+      Navigator.pushReplacementNamed(context, '/home');
+    } else {
+      Navigator.pushReplacementNamed(context, '/login');
+    }
   }
 
   @override

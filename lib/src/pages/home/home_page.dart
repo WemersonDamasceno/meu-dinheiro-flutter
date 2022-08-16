@@ -1,17 +1,21 @@
 import 'package:finances/src/helpers/db_Provider.dart';
+import 'package:finances/src/helpers/shared_preferences.dart';
 import 'package:finances/src/models/movimentacoes.dart';
 import 'package:finances/src/pages/home/widgets/movimentacao_widget.dart';
+import 'package:finances/src/stores/auth/auth_store.dart';
 import 'package:finances/src/stores/entradas_saidas/entradas_saidas_store.dart';
 import 'package:finances/src/stores/movimentacoes/movimentacoes_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:lottie/lottie.dart';
+
 import 'widgets/input_widget.dart';
 
 //Instancia dos stores
 final storeMov = MovimentacoesStore();
 final storeSaldo = EntradasSaidas();
+final storeAuth = AuthStore();
 
 //instancia do SQLite
 MovimentacoesDbProvider dbSQLite = MovimentacoesDbProvider();
@@ -31,6 +35,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   bool exibirSaldo = false;
   var movimentacoes = [];
+  String name = "";
 
   @override
   void dispose() {
@@ -47,6 +52,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   buscarMovimentacoesNoSQLite() async {
+    name = await SharedPref().read("name");
+    storeAuth.setName(name);
     WidgetsFlutterBinding.ensureInitialized();
     movimentacoes = await dbSQLite.buscarMovimentacoes();
     if (movimentacoes.length > 0) {
@@ -97,12 +104,16 @@ class _HomePageState extends State<HomePage> {
                     alignment: Alignment.bottomLeft,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Text(
-                          "Olá, Wemerson",
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
+                      children: [
+                        Observer(
+                          builder: (context) {
+                            return Text(
+                              "Olá, ${storeAuth.name}",
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            );
+                          },
                         ),
                         Text(
                           "Seja bem vindo!",

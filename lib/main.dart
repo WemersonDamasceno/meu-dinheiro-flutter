@@ -1,4 +1,5 @@
 import 'package:finances/src/pages/home/home_page.dart';
+import 'package:finances/src/pages/login/login_page.dart';
 import 'package:finances/src/pages/splash/splash.dart';
 import 'package:flutter/material.dart';
 
@@ -13,6 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Meu dinheiro',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         fontFamily: "Poppins",
         primarySwatch: Colors.red,
@@ -21,6 +23,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/splash': (context) => const SplashPage(),
+        '/login': (context) => const LoginPage(),
         '/home': (context) => const HomePage(),
       },
     );

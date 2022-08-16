@@ -1,8 +1,4 @@
-import 'package:path/path.dart';
-
 class SQLiteHelper {
-  static SQLiteHelper? _sqliteHelp;
-
   //Usar para não digitar os nomes errados
   String movimentacaoTabela = "movimentacao";
   String colId = "id";

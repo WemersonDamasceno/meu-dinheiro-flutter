@@ -1,10 +1,10 @@
+import 'package:finances/app/data/datasources/db_Provider.dart';
+import 'package:finances/app/data/models/movimentacoes.dart';
+import 'package:finances/app/presentation/features/home/widgets/movimentacao_widget.dart';
+import 'package:finances/app/presentation/stores/auth/auth_store.dart';
+import 'package:finances/app/presentation/stores/entradas_saidas/entradas_saidas_store.dart';
+import 'package:finances/app/presentation/stores/movimentacoes/movimentacoes_store.dart';
 import 'package:finances/core/shared_preferences.dart';
-import 'package:finances/src/data/datasources/db_Provider.dart';
-import 'package:finances/src/data/models/movimentacoes.dart';
-import 'package:finances/src/presentation/features/home/widgets/movimentacao_widget.dart';
-import 'package:finances/src/presentation/stores/auth/auth_store.dart';
-import 'package:finances/src/presentation/stores/entradas_saidas/entradas_saidas_store.dart';
-import 'package:finances/src/presentation/stores/movimentacoes/movimentacoes_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -737,7 +737,7 @@ class _DialogAddEntradasState extends State<DialogAddEntradas> {
                       } else {
                         idItem = storeMov.listMovimentacao.last.id! + 1;
                       }
-                      ItemMovimentacao item = ItemMovimentacao(
+                      final item = ItemMovimentacao(
                         isDespesa: false,
                         data: "$dia/$mes/${DateTime.now().year}",
                         id: idItem,

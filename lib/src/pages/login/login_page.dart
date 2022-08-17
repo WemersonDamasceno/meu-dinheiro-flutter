@@ -1,12 +1,31 @@
 import 'package:finances/src/helpers/shared_preferences.dart';
+import 'package:finances/src/pages/home/home_page.dart';
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
   @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  late TextEditingController controller;
+
+  @override
+  void initState() {
+    controller = TextEditingController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final controller = TextEditingController();
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -42,7 +61,7 @@ class LoginPage extends StatelessWidget {
               SizedBox(height: 30),
               InkWell(
                 onTap: () async {
-                  await SharedPref().save("name", controller.text);
+                  await storeAuth.login(controller.text);
                   Navigator.pushReplacementNamed(context, '/home');
                 },
                 child: Container(

@@ -8,6 +8,7 @@ import 'package:finances/src/stores/movimentacoes/movimentacoes_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 
 import 'widgets/input_widget.dart';
@@ -102,26 +103,41 @@ class _HomePageState extends State<HomePage> {
                       vertical: _size.height * .08),
                   child: Align(
                     alignment: Alignment.bottomLeft,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Observer(
-                          builder: (context) {
-                            return Text(
-                              "Olá, ${storeAuth.name}",
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Observer(
+                              builder: (context) {
+                                return Text(
+                                  "Olá, ${storeAuth.name}",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                );
+                              },
+                            ),
+                            Text(
+                              "Seja bem vindo!",
                               style: TextStyle(
-                                color: Colors.white,
-                              ),
-                            );
-                          },
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w700),
+                            ),
+                          ],
                         ),
-                        Text(
-                          "Seja bem vindo!",
-                          style: TextStyle(
+                        IconButton(
+                            onPressed: () async {
+                              await storeAuth.logout();
+                              Navigator.popAndPushNamed(context, '/');
+                            },
+                            icon: Icon(
+                              Icons.output_rounded,
                               color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w700),
-                        ),
+                              size: 30,
+                            ))
                       ],
                     ),
                   ),
@@ -140,6 +156,7 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         Column(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const Text(
                               "Saldo disponível",
@@ -148,30 +165,14 @@ class _HomePageState extends State<HomePage> {
                             Observer(
                                 builder: (context) => Row(
                                       children: [
-                                        Text(
-                                          "R\$ ",
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.w700),
-                                        ),
                                         !exibirSaldo
-                                            ? Padding(
-                                                padding: const EdgeInsets.only(
-                                                    bottom: 4),
-                                                child: Container(
-                                                  height: 30,
-                                                  width: 100,
-                                                  child: Text(
-                                                    "${storeSaldo.saldo.toStringAsFixed(2)}",
-                                                    style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 20,
-                                                        fontWeight:
-                                                            FontWeight.w700),
-                                                  ),
-                                                ),
-                                              )
+                                            ? Text(
+                                                "${NumberFormat.currency(symbol: "R\$", decimalDigits: 2).format(storeSaldo.saldo)}",
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 20,
+                                                    fontWeight:
+                                                        FontWeight.w700))
                                             : Container(
                                                 height: 20,
                                                 width: 100,

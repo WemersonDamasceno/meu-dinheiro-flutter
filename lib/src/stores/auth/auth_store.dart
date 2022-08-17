@@ -1,3 +1,4 @@
+import 'package:finances/src/helpers/shared_preferences.dart';
 import 'package:mobx/mobx.dart';
 
 part 'auth_store.g.dart';
@@ -10,4 +11,14 @@ abstract class _AuthStore with Store {
 
   @action
   setName(String name) => this.name = name;
+
+  @action
+  Future<void> logout() async {
+    await SharedPref().remove("name");
+  }
+
+  @action
+  Future<void> login(String name) async {
+    await SharedPref().save("name", name);
+  }
 }

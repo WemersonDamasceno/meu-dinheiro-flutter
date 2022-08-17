@@ -14,7 +14,7 @@
 *.ipr
 *.iws
 .idea/
-.gitgnore
+.gitignore
 pubspec.lock
 
 # The .vscode folder contains launch configuration and tasks you configure in

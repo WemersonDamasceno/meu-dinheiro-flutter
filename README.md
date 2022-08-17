@@ -30,5 +30,9 @@ $ flutter pub get
 - Execute o App com o comando: 
 $ flutter run
 
+<h1> Baixe o apk em seu Android </h1>
+<a href="https://github.com/WemersonDamasceno/Meu-Dinheiro-Flutter/raw/master/docs/apk-meu-dinheiro/app-release.apk"> Clique aqui!
+</a>
+
 
 Made with :heart: and Flutter.

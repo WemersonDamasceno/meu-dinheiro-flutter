@@ -361,7 +361,7 @@ class _HomePageState extends State<HomePage> {
                                 SizedBox(
                                   width: _size.width * .6,
                                   child: LottieBuilder.asset(
-                                      "assets/lottie/pig_animation.json"),
+                                      "lib/core/assets/lottie/pig_animation.json"),
                                 ),
                                 const Text(
                                     "Você ainda não possui movimentações"),

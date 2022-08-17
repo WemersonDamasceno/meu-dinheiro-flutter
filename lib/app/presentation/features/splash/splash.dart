@@ -58,7 +58,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                 SizedBox(
                   width: size.width * .8,
                   child: LottieBuilder.asset(
-                    "assets/lottie/splash_animation.json",
+                    "lib/core/assets/lottie/splash_animation.json",
                   ),
                 ),
                 const Text(

@@ -40,18 +40,18 @@ dev_dependencies:
 flutter_icons:
   android: true
   ios: true
-  image_path: "assets/images/logo.png"
+  image_path: "lib/core/assets/images/logo.png"
 
   flutter_lints: ^1.0.0
 
 flutter:
   uses-material-design: true
   assets:
-    - assets/lottie/
-    - assets/images/
-    - assets/fonts/
+    - lib/core/assets/lottie/
+    - lib/core/assets/images/
+    - lib/core/assets/fonts/
 
   fonts:
     - family: Poppins
       fonts:
-        - asset: assets/fonts/poppins_regular.ttf
+        - asset: lib/core/assets/fonts/poppins_regular.ttf

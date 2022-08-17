@@ -1,6 +1,6 @@
-import 'package:finances/src/pages/home/home_page.dart';
-import 'package:finances/src/pages/login/login_page.dart';
-import 'package:finances/src/pages/splash/splash.dart';
+import 'package:finances/app/presentation/features/home/home_page.dart';
+import 'package:finances/app/presentation/features/login/login_page.dart';
+import 'package:finances/app/presentation/features/splash/splash.dart';
 import 'package:flutter/material.dart';
 
 void main() {

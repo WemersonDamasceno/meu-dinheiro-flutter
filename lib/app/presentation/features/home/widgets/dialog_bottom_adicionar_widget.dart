@@ -1,5 +1,5 @@
-import 'package:finances/src/models/movimentacoes.dart';
-import 'package:finances/src/stores/movimentacoes/movimentacoes_store.dart';
+import 'package:finances/app/data/models/movimentacoes.dart';
+import 'package:finances/app/presentation/stores/movimentacoes/movimentacoes_store.dart';
 import 'package:flutter/material.dart';
 
 import 'input_widget.dart';
@@ -127,7 +127,7 @@ class _DialogBottomAddState extends State<DialogBottomAdd> {
                         mes = "0${DateTime.now().month}";
                       }
 
-                      ItemMovimentacao item = ItemMovimentacao(
+                      final item = ItemMovimentacao(
                         isDespesa: false,
                         data: "$dia/$mes/${DateTime.now().year}",
                         id: 0,

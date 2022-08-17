@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:finances/src/helpers/shared_preferences.dart';
+import 'package:finances/core/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 

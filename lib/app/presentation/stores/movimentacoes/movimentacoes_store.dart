@@ -1,4 +1,4 @@
-import 'package:finances/src/models/movimentacoes.dart';
+import 'package:finances/app/data/models/movimentacoes.dart';
 import 'package:mobx/mobx.dart';
 
 part 'movimentacoes_store.g.dart';

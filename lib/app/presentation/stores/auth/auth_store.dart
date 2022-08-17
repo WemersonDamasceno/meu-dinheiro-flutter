@@ -1,4 +1,4 @@
-import 'package:finances/src/helpers/shared_preferences.dart';
+import 'package:finances/core/shared_preferences.dart';
 import 'package:mobx/mobx.dart';
 
 part 'auth_store.g.dart';

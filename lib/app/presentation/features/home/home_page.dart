@@ -1,10 +1,10 @@
-import 'package:finances/src/helpers/db_Provider.dart';
-import 'package:finances/src/helpers/shared_preferences.dart';
-import 'package:finances/src/models/movimentacoes.dart';
-import 'package:finances/src/pages/home/widgets/movimentacao_widget.dart';
-import 'package:finances/src/stores/auth/auth_store.dart';
-import 'package:finances/src/stores/entradas_saidas/entradas_saidas_store.dart';
-import 'package:finances/src/stores/movimentacoes/movimentacoes_store.dart';
+import 'package:finances/core/shared_preferences.dart';
+import 'package:finances/src/data/datasources/db_Provider.dart';
+import 'package:finances/src/data/models/movimentacoes.dart';
+import 'package:finances/src/presentation/features/home/widgets/movimentacao_widget.dart';
+import 'package:finances/src/presentation/stores/auth/auth_store.dart';
+import 'package:finances/src/presentation/stores/entradas_saidas/entradas_saidas_store.dart';
+import 'package:finances/src/presentation/stores/movimentacoes/movimentacoes_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';

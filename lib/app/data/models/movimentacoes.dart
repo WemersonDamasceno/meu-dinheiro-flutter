@@ -1,6 +1,7 @@
+import 'package:finances/app/domain/entities/movimentacao_entity.dart';
 import 'package:flutter/cupertino.dart';
 
-class ItemMovimentacao {
+class ItemMovimentacao extends MovimentacaoEntity {
   int? id;
   String? titulo;
   String? data;

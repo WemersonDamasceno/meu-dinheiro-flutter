@@ -19,10 +19,10 @@
 Antes de tudo, configure o ambiente Flutter da sua maquina, veja mais em https://flutter.dev/docs/get-started/install
 
 - Faça o clone do repositório:
-$ git clone https://github.com/WemersonDamasceno/Meu-Dinheiro-Flutter.git
+$ git clone https://github.com/WemersonDamasceno/meu-dinheiro-flutter.git
 
 - Entre na pasta:
-$ cd Meu-Dinheiro-Flutter
+$ cd meu-dinheiro-flutter
 
 - Instale as dependencias:
 $ flutter pub get

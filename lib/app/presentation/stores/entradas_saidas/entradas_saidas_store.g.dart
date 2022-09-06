@@ -61,7 +61,7 @@ mixin _$EntradasSaidas on _EntradasSaidas, Store {
       ActionController(name: '_EntradasSaidas', context: context);
 
   @override
-  dynamic addEntradas(double valor) {
+  void addEntradas(double valor) {
     final _$actionInfo = _$_EntradasSaidasActionController.startAction(
         name: '_EntradasSaidas.addEntradas');
     try {
@@ -72,7 +72,7 @@ mixin _$EntradasSaidas on _EntradasSaidas, Store {
   }
 
   @override
-  dynamic addSaidas(double valor) {
+  void addSaidas(double valor) {
     final _$actionInfo = _$_EntradasSaidasActionController.startAction(
         name: '_EntradasSaidas.addSaidas');
     try {
@@ -83,7 +83,7 @@ mixin _$EntradasSaidas on _EntradasSaidas, Store {
   }
 
   @override
-  dynamic atualizarSaldo() {
+  void atualizarSaldo() {
     final _$actionInfo = _$_EntradasSaidasActionController.startAction(
         name: '_EntradasSaidas.atualizarSaldo');
     try {

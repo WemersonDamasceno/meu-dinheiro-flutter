@@ -1,5 +1,6 @@
 import 'package:finances/app/data/datasources/db_Provider.dart';
 import 'package:finances/app/data/models/movimentacoes.dart';
+import 'package:finances/app/presentation/features/home/widgets/input_widget.dart';
 import 'package:finances/app/presentation/features/home/widgets/movimentacao_widget.dart';
 import 'package:finances/app/presentation/stores/auth/auth_store.dart';
 import 'package:finances/app/presentation/stores/entradas_saidas/entradas_saidas_store.dart';
@@ -12,8 +13,6 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:showcaseview/showcaseview.dart';
-
-import 'widgets/input_widget.dart';
 
 //Instancia dos stores
 final storeMov = MovimentacoesStore();
@@ -43,7 +42,7 @@ class _HomePageState extends State<HomePage> {
   bool exibirSaldo = false;
   bool _isShowcase = false;
   var movimentacoes = [];
-  String name = "";
+  String? name = "";
 
   @override
   void dispose() {
@@ -60,7 +59,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
-  initShowcase() async {
+  void initShowcase() async {
     _isShowcase = await SharedPref().read("showcase") ?? true;
     if (_isShowcase) {
       WidgetsBinding.instance.addPostFrameCallback(
@@ -73,9 +72,9 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  buscarMovimentacoesNoSQLite() async {
+  Future<void> buscarMovimentacoesNoSQLite() async {
     name = await SharedPref().read("name");
-    storeAuth.setName(name);
+    storeAuth.setName(name!);
     WidgetsFlutterBinding.ensureInitialized();
     movimentacoes = await dbSQLite.buscarMovimentacoes();
     if (movimentacoes.length > 0) {

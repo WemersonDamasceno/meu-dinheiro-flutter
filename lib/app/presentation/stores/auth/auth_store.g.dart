@@ -24,11 +24,27 @@ mixin _$AuthStore on _AuthStore, Store {
     });
   }
 
+  late final _$logoutAsyncAction =
+      AsyncAction('_AuthStore.logout', context: context);
+
+  @override
+  Future<void> logout() {
+    return _$logoutAsyncAction.run(() => super.logout());
+  }
+
+  late final _$loginAsyncAction =
+      AsyncAction('_AuthStore.login', context: context);
+
+  @override
+  Future<void> login(String name) {
+    return _$loginAsyncAction.run(() => super.login(name));
+  }
+
   late final _$_AuthStoreActionController =
       ActionController(name: '_AuthStore', context: context);
 
   @override
-  dynamic setName(String name) {
+  String setName(String name) {
     final _$actionInfo =
         _$_AuthStoreActionController.startAction(name: '_AuthStore.setName');
     try {

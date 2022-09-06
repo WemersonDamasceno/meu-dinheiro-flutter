@@ -12,7 +12,7 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
-  startTime() async {
+  Future<Timer> startTime() async {
     var _duration = const Duration(seconds: 4);
     return Timer(_duration, navigationPage);
   }

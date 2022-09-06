@@ -29,7 +29,7 @@ mixin _$MovimentacoesStore on _MovimentacoesStore, Store {
       ActionController(name: '_MovimentacoesStore', context: context);
 
   @override
-  dynamic addItemMovimentacao(ItemMovimentacao item) {
+  void addItemMovimentacao(ItemMovimentacao item) {
     final _$actionInfo = _$_MovimentacoesStoreActionController.startAction(
         name: '_MovimentacoesStore.addItemMovimentacao');
     try {
@@ -40,7 +40,7 @@ mixin _$MovimentacoesStore on _MovimentacoesStore, Store {
   }
 
   @override
-  dynamic removeItemMovimentacao(ItemMovimentacao item) {
+  void removeItemMovimentacao(ItemMovimentacao item) {
     final _$actionInfo = _$_MovimentacoesStoreActionController.startAction(
         name: '_MovimentacoesStore.removeItemMovimentacao');
     try {

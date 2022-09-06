@@ -10,7 +10,7 @@ abstract class _AuthStore with Store {
   String name = "";
 
   @action
-  setName(String name) => this.name = name;
+  String setName(String name) => this.name = name;
 
   @action
   Future<void> logout() async {

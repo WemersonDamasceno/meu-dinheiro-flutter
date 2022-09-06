@@ -5,11 +5,13 @@ import 'package:finances/app/presentation/stores/auth/auth_store.dart';
 import 'package:finances/app/presentation/stores/entradas_saidas/entradas_saidas_store.dart';
 import 'package:finances/app/presentation/stores/movimentacoes/movimentacoes_store.dart';
 import 'package:finances/core/shared_preferences.dart';
+import 'package:finances/core/utils/showcase.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
+import 'package:showcaseview/showcaseview.dart';
 
 import 'widgets/input_widget.dart';
 
@@ -34,7 +36,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final _oneKey = GlobalKey();
+  final _twoKey = GlobalKey();
+  final _threeKey = GlobalKey();
+
   bool exibirSaldo = false;
+  bool _isShowcase = false;
   var movimentacoes = [];
   String name = "";
 
@@ -49,7 +56,21 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     buscarMovimentacoesNoSQLite();
+    initShowcase();
     super.initState();
+  }
+
+  initShowcase() async {
+    _isShowcase = await SharedPref().read("showcase") ?? true;
+    if (_isShowcase) {
+      WidgetsBinding.instance.addPostFrameCallback(
+        (_) => ShowCaseWidget.of(context).startShowCase([
+          _oneKey,
+          _twoKey,
+          _threeKey,
+        ]),
+      );
+    }
   }
 
   buscarMovimentacoesNoSQLite() async {
@@ -79,7 +100,25 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     var _size = MediaQuery.of(context).size;
     return Scaffold(
-      body: Column(
+      body: homePageBodyWidget(_size),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _exibirModalBottomSheet(context);
+        },
+        backgroundColor: const Color(0xFFFF4328),
+        child: CustomShowCase(
+            isShowCase: _isShowcase,
+            keyGlobal: _threeKey,
+            title: "Adicione uma nova movimentação",
+            description: "Clique aqui para adicionar uma nova movimentação",
+            child: const Icon(Icons.add)),
+      ),
+    );
+  }
+
+  Widget homePageBodyWidget(Size _size) {
+    return SizedBox(
+      child: Column(
         children: [
           Stack(
             children: [
@@ -98,9 +137,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 child: Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: _size.width * 0.1,
-                      vertical: _size.height * .08),
+                  padding: EdgeInsets.symmetric(horizontal: _size.width * 0.1, vertical: _size.height * .08),
                   child: Align(
                     alignment: Alignment.bottomLeft,
                     child: Row(
@@ -121,23 +158,26 @@ class _HomePageState extends State<HomePage> {
                             ),
                             Text(
                               "Seja bem vindo!",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w700),
+                              style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w700),
                             ),
                           ],
                         ),
                         IconButton(
                             onPressed: () async {
                               await storeAuth.logout();
-                              Navigator.popAndPushNamed(context, '/');
+                              Navigator.popAndPushNamed(context, '/splash');
                             },
-                            icon: Icon(
-                              Icons.output_rounded,
-                              color: Colors.white,
-                              size: 30,
-                            ))
+                            icon: CustomShowCase(
+                              isShowCase: _isShowcase,
+                              keyGlobal: _oneKey,
+                              title: "Faça Logout",
+                              description: 'Ao fazer logout todo o\nseu historico é apagado',
+                              child: Icon(
+                                Icons.output_rounded,
+                                color: Colors.white,
+                                size: 30,
+                              ),
+                            )),
                       ],
                     ),
                   ),
@@ -166,13 +206,18 @@ class _HomePageState extends State<HomePage> {
                                 builder: (context) => Row(
                                       children: [
                                         !exibirSaldo
-                                            ? Text(
-                                                "${NumberFormat.currency(symbol: "R\$", decimalDigits: 2).format(storeSaldo.saldo)}",
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 20,
-                                                    fontWeight:
-                                                        FontWeight.w700))
+                                            ? CustomShowCase(
+                                                keyGlobal: _twoKey,
+                                                title: "Seu saldo",
+                                                isShowCase: _isShowcase,
+                                                description: "Aqui está seu saldo em reais",
+                                                child: Text(
+                                                    "${NumberFormat.currency(symbol: "R\$", decimalDigits: 2).format(storeSaldo.saldo)}",
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 20,
+                                                        fontWeight: FontWeight.w700)),
+                                              )
                                             : Container(
                                                 height: 20,
                                                 width: 100,
@@ -199,10 +244,8 @@ class _HomePageState extends State<HomePage> {
                                   });
                                 },
                                 icon: exibirSaldo
-                                    ? Icon(Icons.visibility_off,
-                                        color: Colors.white)
-                                    : Icon(Icons.visibility_rounded,
-                                        color: Colors.white))
+                                    ? Icon(Icons.visibility_off, color: Colors.white)
+                                    : Icon(Icons.visibility_rounded, color: Colors.white))
                           ],
                         )
                       ],
@@ -243,9 +286,7 @@ class _HomePageState extends State<HomePage> {
                           Observer(
                             builder: (context) => Text(
                               "R\$ ${storeSaldo.entradasTotal.toStringAsFixed(2)}",
-                              style: TextStyle(
-                                  color: Colors.green,
-                                  fontWeight: FontWeight.w700),
+                              style: TextStyle(color: Colors.green, fontWeight: FontWeight.w700),
                             ),
                           ),
                         ],
@@ -264,9 +305,7 @@ class _HomePageState extends State<HomePage> {
                           Observer(
                             builder: (context) => Text(
                               "R\$ ${storeSaldo.saidasTotal.toStringAsFixed(2)}",
-                              style: TextStyle(
-                                  color: Colors.red,
-                                  fontWeight: FontWeight.w700),
+                              style: TextStyle(color: Colors.red, fontWeight: FontWeight.w700),
                             ),
                           ),
                         ],
@@ -281,14 +320,10 @@ class _HomePageState extends State<HomePage> {
                   Align(
                     alignment: Alignment.bottomLeft,
                     child: Padding(
-                      padding: EdgeInsets.only(
-                          left: _size.width * 0.05,
-                          right: _size.width * 0.05,
-                          top: 10),
+                      padding: EdgeInsets.only(left: _size.width * 0.05, right: _size.width * 0.05, top: 10),
                       child: const Text(
                         "Movimentações",
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.w500),
+                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
                       ),
                     ),
                   ),
@@ -302,25 +337,18 @@ class _HomePageState extends State<HomePage> {
                                   itemCount: storeMov.listMovimentacao.length,
                                   scrollDirection: Axis.vertical,
                                   shrinkWrap: true,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
+                                  itemBuilder: (BuildContext context, int index) {
                                     final item = ItemMovimentacaoWidget(
-                                      titulo: storeMov
-                                          .listMovimentacao[index].titulo!,
-                                      data: storeMov
-                                          .listMovimentacao[index].data!,
-                                      valor: storeMov
-                                          .listMovimentacao[index].valor!,
-                                      icon: storeMov
-                                          .listMovimentacao[index].icon!,
-                                      despesa: storeMov
-                                          .listMovimentacao[index].isDespesa!,
+                                      titulo: storeMov.listMovimentacao[index].titulo!,
+                                      data: storeMov.listMovimentacao[index].data!,
+                                      valor: storeMov.listMovimentacao[index].valor!,
+                                      icon: storeMov.listMovimentacao[index].icon!,
+                                      despesa: storeMov.listMovimentacao[index].isDespesa!,
                                     );
 
                                     return Slidable(
                                       child: item,
-                                      actionPane:
-                                          const SlidableDrawerActionPane(),
+                                      actionPane: const SlidableDrawerActionPane(),
                                       actionExtentRatio: 0.25,
                                       actions: [
                                         IconSlideAction(
@@ -329,27 +357,20 @@ class _HomePageState extends State<HomePage> {
                                           color: Colors.red,
                                           foregroundColor: Colors.white,
                                           onTap: () async {
-                                            double valor = double.parse(storeMov
-                                                .listMovimentacao[index]
-                                                .valor!);
+                                            double valor = double.parse(storeMov.listMovimentacao[index].valor!);
 
                                             valor = valor * -1;
-                                            if (storeMov.listMovimentacao[index]
-                                                .isDespesa!) {
+                                            if (storeMov.listMovimentacao[index].isDespesa!) {
                                               storeSaldo.addSaidas(valor);
                                             } else {
                                               storeSaldo.addEntradas(valor);
                                             }
                                             storeSaldo.atualizarSaldo();
                                             //remover do banco
-                                            await dbSQLite.deletarMovimentacoes(
-                                                storeMov.listMovimentacao[index]
-                                                    .id!);
+                                            await dbSQLite.deletarMovimentacoes(storeMov.listMovimentacao[index].id!);
 
                                             //Tirar da lista
-                                            storeMov.removeItemMovimentacao(
-                                                storeMov
-                                                    .listMovimentacao[index]);
+                                            storeMov.removeItemMovimentacao(storeMov.listMovimentacao[index]);
                                           },
                                         )
                                       ],
@@ -360,11 +381,9 @@ class _HomePageState extends State<HomePage> {
                               children: [
                                 SizedBox(
                                   width: _size.width * .6,
-                                  child: LottieBuilder.asset(
-                                      "lib/core/assets/lottie/pig_animation.json"),
+                                  child: LottieBuilder.asset("lib/core/assets/lottie/pig_animation.json"),
                                 ),
-                                const Text(
-                                    "Você ainda não possui movimentações"),
+                                const Text("Você ainda não possui movimentações"),
                               ],
                             ),
                     ),
@@ -375,17 +394,10 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _configurandoModalBottomSheet(context);
-        },
-        backgroundColor: const Color(0xFFFF4328),
-        child: const Icon(Icons.add),
-      ),
     );
   }
 
-  void _configurandoModalBottomSheet(context) {
+  void _exibirModalBottomSheet(context) {
     showModalBottomSheet(
         context: context,
         builder: (BuildContext bc) {
@@ -511,12 +523,8 @@ class _DialogAddSaidasState extends State<DialogAddSaidas> {
                       child: Container(
                         height: 70,
                         width: 90,
-                        color: controllerIcon == 1
-                            ? Colors.red
-                            : Colors.transparent,
-                        child: const Card(
-                            elevation: 1,
-                            child: Icon(Icons.water_damage_outlined)),
+                        color: controllerIcon == 1 ? Colors.red : Colors.transparent,
+                        child: const Card(elevation: 1, child: Icon(Icons.water_damage_outlined)),
                       ),
                     ),
                     SizedBox(
@@ -529,11 +537,8 @@ class _DialogAddSaidasState extends State<DialogAddSaidas> {
                       child: Container(
                         height: 70,
                         width: 90,
-                        color: controllerIcon == 2
-                            ? Colors.red
-                            : Colors.transparent,
-                        child: const Card(
-                            elevation: 1, child: Icon(Icons.money_off)),
+                        color: controllerIcon == 2 ? Colors.red : Colors.transparent,
+                        child: const Card(elevation: 1, child: Icon(Icons.money_off)),
                       ),
                     ),
                   ],
@@ -548,8 +553,7 @@ class _DialogAddSaidasState extends State<DialogAddSaidas> {
                 child: ElevatedButton(
                     child: const Text(
                       'Adicionar',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                     onPressed: () async {
                       String dia = "${DateTime.now().day}";
@@ -575,9 +579,7 @@ class _DialogAddSaidasState extends State<DialogAddSaidas> {
                         id: idItem,
                         titulo: controllerTitulo.text,
                         valor: controllerValor.text,
-                        icon: controllerIcon == 1
-                            ? Icons.water_damage_outlined
-                            : Icons.money_off,
+                        icon: controllerIcon == 1 ? Icons.water_damage_outlined : Icons.money_off,
                       );
 
                       //Metodo do store para adicionar na lista
@@ -678,9 +680,7 @@ class _DialogAddEntradasState extends State<DialogAddEntradas> {
                       child: Container(
                         height: 70,
                         width: 90,
-                        color: controllerIcon == 1
-                            ? Colors.red
-                            : Colors.transparent,
+                        color: controllerIcon == 1 ? Colors.red : Colors.transparent,
                         child: const Card(
                           elevation: 1,
                           child: Icon(Icons.account_balance_wallet_rounded),
@@ -697,12 +697,8 @@ class _DialogAddEntradasState extends State<DialogAddEntradas> {
                       child: Container(
                         height: 70,
                         width: 90,
-                        color: controllerIcon == 2
-                            ? Colors.red
-                            : Colors.transparent,
-                        child: const Card(
-                            elevation: 1,
-                            child: Icon(Icons.monetization_on_outlined)),
+                        color: controllerIcon == 2 ? Colors.red : Colors.transparent,
+                        child: const Card(elevation: 1, child: Icon(Icons.monetization_on_outlined)),
                       ),
                     ),
                   ],
@@ -717,8 +713,7 @@ class _DialogAddEntradasState extends State<DialogAddEntradas> {
                 child: ElevatedButton(
                     child: const Text(
                       'Adicionar',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                     onPressed: () async {
                       String dia = "${DateTime.now().day}";
@@ -743,9 +738,8 @@ class _DialogAddEntradasState extends State<DialogAddEntradas> {
                         id: idItem,
                         titulo: controllerTitulo.text,
                         valor: controllerValor.text,
-                        icon: controllerIcon == 1
-                            ? Icons.account_balance_wallet_rounded
-                            : Icons.monetization_on_outlined,
+                        icon:
+                            controllerIcon == 1 ? Icons.account_balance_wallet_rounded : Icons.monetization_on_outlined,
                       );
 
                       storeMov.addItemMovimentacao(item);

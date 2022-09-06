@@ -63,10 +63,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                 ),
                 const Text(
                   "Meu Dinheiro!",
-                  style: TextStyle(
-                      fontSize: 25,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white),
+                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.w700, color: Colors.white),
                 ),
               ],
             ),

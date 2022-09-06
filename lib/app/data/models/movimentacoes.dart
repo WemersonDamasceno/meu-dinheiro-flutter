@@ -2,14 +2,17 @@ import 'package:finances/app/domain/entities/movimentacao_entity.dart';
 import 'package:flutter/cupertino.dart';
 
 class ItemMovimentacao extends MovimentacaoEntity {
-  int? id;
-  String? titulo;
-  String? data;
-  String? valor;
-  bool? isDespesa;
-  IconData? icon;
-  Color? colorIcon;
+  ItemMovimentacao.fromMap(Map<String, dynamic> map) {
+    int despesa = map['isDespesa'];
+    int code = map['icon'];
 
+    id = map['id'];
+    titulo = map['titulo'];
+    data = map['data'];
+    valor = map['valor'];
+    isDespesa = despesa == 0 ? true : false;
+    icon = IconData(code, fontFamily: 'MaterialIcons');
+  }
   ItemMovimentacao({
     required this.id,
     required this.titulo,
@@ -18,6 +21,13 @@ class ItemMovimentacao extends MovimentacaoEntity {
     required this.isDespesa,
     required this.icon,
   });
+  int? id;
+  String? titulo;
+  String? data;
+  String? valor;
+  bool? isDespesa;
+  IconData? icon;
+  Color? colorIcon;
 
   Map<String, dynamic> toMap() {
     int despesa = isDespesa! ? 0 : 1;
@@ -32,17 +42,5 @@ class ItemMovimentacao extends MovimentacaoEntity {
       'icon': code,
     };
     return map;
-  }
-
-  ItemMovimentacao.fromMap(Map<String, dynamic> map) {
-    int despesa = map['isDespesa'];
-    int code = map['icon'];
-
-    id = map['id'];
-    titulo = map['titulo'];
-    data = map['data'];
-    valor = map['valor'];
-    isDespesa = despesa == 0 ? true : false;
-    icon = IconData(code, fontFamily: 'MaterialIcons');
   }
 }

@@ -1,4 +1,6 @@
 class SQLiteHelper {
+  //construtor nomeado para criar instancia da classe
+  SQLiteHelper._createInstance();
   //Usar para não digitar os nomes errados
   String movimentacaoTabela = "movimentacao";
   String colId = "id";
@@ -8,7 +10,4 @@ class SQLiteHelper {
   String colColorIcon = "colorIcon";
   String colIsDespesa = "isDespesa";
   String colIcon = 'icon';
-
-  //construtor nomeado para criar instancia da classe
-  SQLiteHelper._createInstance();
 }

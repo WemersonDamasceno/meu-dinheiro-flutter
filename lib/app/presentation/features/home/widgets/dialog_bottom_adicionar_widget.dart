@@ -4,10 +4,12 @@ import 'package:finances/app/presentation/stores/movimentacoes/movimentacoes_sto
 import 'package:flutter/material.dart';
 
 class DialogBottomAdd extends StatefulWidget {
+  const DialogBottomAdd({
+    required this.storeMov,
+    Key? key,
+  }) : super(key: key);
   //Instancia do store
   final MovimentacoesStore storeMov;
-
-  const DialogBottomAdd({Key? key, required this.storeMov}) : super(key: key);
 
   @override
   _DialogBottomAddState createState() => _DialogBottomAddState();

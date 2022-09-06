@@ -1,4 +1,4 @@
-import 'package:finances/app/data/datasources/db_Provider.dart';
+import 'package:finances/app/data/datasources/db_provider.dart';
 import 'package:finances/app/data/models/movimentacoes.dart';
 import 'package:finances/app/presentation/features/home/widgets/input_widget.dart';
 import 'package:finances/app/presentation/features/home/widgets/movimentacao_widget.dart';
@@ -60,6 +60,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   void initShowcase() async {
+    final re = await SharedPref().read("showcase");
+    if (re == null) {
+      _isShowcase = true;
+      SharedPref().save("showcase", true);
+    }
     _isShowcase = await SharedPref().read("showcase") ?? true;
     if (_isShowcase) {
       WidgetsBinding.instance.addPostFrameCallback(
@@ -77,11 +82,8 @@ class _HomePageState extends State<HomePage> {
     storeAuth.setName(name!);
     WidgetsFlutterBinding.ensureInitialized();
     movimentacoes = await dbSQLite.buscarMovimentacoes();
-    if (movimentacoes.length > 0) {
-      movimentacoes.forEach((element) {
-        storeMov.addItemMovimentacao(element);
-      });
-
+    if (movimentacoes.isNotEmpty) {
+      movimentacoes.forEach((element) => storeMov.addItemMovimentacao(element));
       storeMov.listMovimentacao.forEach((item) {
         double valor = double.parse(item.valor!);
         if (item.isDespesa!) {
@@ -329,7 +331,7 @@ class _HomePageState extends State<HomePage> {
                   Observer(
                     builder: (_) => SizedBox(
                       height: _size.height * .44,
-                      child: storeMov.listMovimentacao.length > 0
+                      child: storeMov.listMovimentacao.isNotEmpty
                           ? Observer(
                               builder: (_) => ListView.builder(
                                   padding: const EdgeInsets.all(8),

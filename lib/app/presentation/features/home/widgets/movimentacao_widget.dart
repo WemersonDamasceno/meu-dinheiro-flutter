@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
 
 class ItemMovimentacaoWidget extends StatelessWidget {
-  final IconData icon;
-  final String titulo;
-  final String data;
-  final String valor;
-  final bool despesa;
   const ItemMovimentacaoWidget({
     Key? key,
     required this.titulo,
@@ -14,6 +9,11 @@ class ItemMovimentacaoWidget extends StatelessWidget {
     required this.icon,
     required this.despesa,
   }) : super(key: key);
+  final IconData icon;
+  final String titulo;
+  final String data;
+  final String valor;
+  final bool despesa;
 
   @override
   Widget build(BuildContext context) {
@@ -47,8 +47,7 @@ class ItemMovimentacaoWidget extends StatelessWidget {
                   children: [
                     Text(
                       titulo,
-                      style: const TextStyle(
-                          fontSize: 17, fontWeight: FontWeight.w800),
+                      style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w800),
                     ),
                     Text(data),
                   ],
@@ -58,12 +57,8 @@ class ItemMovimentacaoWidget extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(right: 5),
               child: despesa
-                  ? Text("- ${valor + ".00"}",
-                      style: const TextStyle(
-                          fontSize: 15, fontWeight: FontWeight.w800))
-                  : Text("+ ${valor + ".00"}",
-                      style: const TextStyle(
-                          fontSize: 15, fontWeight: FontWeight.w800)),
+                  ? Text("- ${valor + ".00"}", style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800))
+                  : Text("+ ${valor + ".00"}", style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
             ),
           ],
         ),

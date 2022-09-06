@@ -1,14 +1,34 @@
 analyzer:
+    
   exclude: 
     - lib/**/**.g.dart
     - test/**/**.mocks.dart
 
-linter:
-  rules: #regras para o codigo do aplicativo
+code-style:
+  
+  
+linter:  
+  #regras para o codigo do aplicativo
+  rules:
     always_use_package_imports: true # Use sempre imports por packages 
     avoid_returning_null_for_future: true # Evite retornar null para metodos assincronos.
     use_key_in_widget_constructors: true # Use sempre contrutores com keys
     always_declare_return_types: true # Sempre declare o tipo de retorno dos metodos
     camel_case_types: true # Tipo deverão usar o padrão UpperCamelCase. 
-
+    avoid_setters_without_getters: true #Evite usar setters sem getters
+    avoid_unnecessary_containers: true # Não use Containers que não são necessários
+    avoid_unused_constructor_parameters: true # Evite definir parâmetros não utilizados em construtores.
+    await_only_futures: true #EVITE usar await em qualquer coisa que não seja um futuro.
+    constant_identifier_names: true #Prefira usar lowerCamelCase para nomes de constantes.
+    file_names: true # Nomeie os arquivos de origem usando letras lowercase_with_underscores.
+    flutter_style_todos: true #Use o formato TODO => TODO(username): message, https://URL-to-issue.
+    implementation_imports: true # Não importe arquivos de implementação de outro pacote.
+    prefer_conditional_assignment: true # Utilize ??= para testar se uma variavel é nula
+    prefer_final_fields: true # Utilize final no campo quando o valor for imutavel
+    prefer_is_empty: true # Use isEmpty ou NotEmpty para verificar se uma lista está vazia ao inves de lista.lengh
+    sort_constructors_first: true # Declare o construtor sempre antes de quaisquer outras coisas.
+    use_decorated_box: true # Use sempre o DecoratedBox quando um Container for usado apenas para o Decoration.
+    use_full_hex_values_for_flutter_colors: true # Prefira utilizar as cores com 8-digitos hexadecimal integer(0xFFFFFFFF) para instanciar a classe Color.
+    use_is_even_rather_than_modulo: true # Utilize o metodo int.isOdd/isEven para checar se o valor é impar ou par.
+    use_named_constants: true # BAD: const Duration(seconds: 0); GOOD: Duration.zero;
 

@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
 
 class InputWidget extends StatelessWidget {
-  final TextInputType type;
-  final String labelText;
-  final IconData? icon;
-  final TextEditingController? txtController;
-
   const InputWidget({
     Key? key,
     this.type = TextInputType.text,
@@ -13,6 +8,10 @@ class InputWidget extends StatelessWidget {
     required this.icon,
     required this.txtController,
   }) : super(key: key);
+  final TextInputType type;
+  final String labelText;
+  final IconData? icon;
+  final TextEditingController? txtController;
 
   @override
   Widget build(BuildContext context) {

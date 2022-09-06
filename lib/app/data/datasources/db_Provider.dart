@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:io';
 
 import 'package:finances/app/data/models/movimentacoes.dart';
@@ -11,8 +10,7 @@ class MovimentacoesDbProvider {
     Directory directory = await getApplicationDocumentsDirectory();
     final path = join(directory.path, "meu_dinheiro.db");
 
-    return await openDatabase(path, version: 1,
-        onCreate: (Database db, int version) async {
+    return await openDatabase(path, version: 1, onCreate: (Database db, int version) async {
       await db.execute("""
           CREATE TABLE Movimentacoes(
           id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -38,8 +36,7 @@ class MovimentacoesDbProvider {
     //returns the memos as a list (array)
 
     final db = await init();
-    final maps = await db.query(
-        "Movimentacoes"); //query all the rows in a table as an array of maps
+    final maps = await db.query("Movimentacoes"); //query all the rows in a table as an array of maps
 
     return List.generate(maps.length, (i) {
       ItemMovimentacao item = ItemMovimentacao.fromMap(maps[i]);
@@ -60,8 +57,7 @@ class MovimentacoesDbProvider {
   Future<int> atualizarMovimentacao(int id, ItemMovimentacao item) async {
     final db = await init();
 
-    int result = await db.update("Movimentacoes", item.toMap(),
-        where: "id = ?", whereArgs: [id]);
+    int result = await db.update("Movimentacoes", item.toMap(), where: "id = ?", whereArgs: [id]);
     return result;
   }
 }

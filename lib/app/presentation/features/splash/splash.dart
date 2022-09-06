@@ -38,8 +38,8 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
+      body: DecoratedBox(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topRight,
             end: Alignment.bottomLeft,

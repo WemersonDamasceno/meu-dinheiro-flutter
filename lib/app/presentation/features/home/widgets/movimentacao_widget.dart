@@ -36,7 +36,7 @@ class ItemMovimentacaoWidget extends StatelessWidget {
                     ),
                     onPressed: () {},
                     style: ElevatedButton.styleFrom(
-                      primary: despesa ? Colors.red.shade400 : Colors.green,
+                      backgroundColor: despesa ? Colors.red.shade400 : Colors.green,
                       shape: const CircleBorder(),
                     ),
                   ),

@@ -36,6 +36,7 @@ class MyApp extends StatelessWidget {
           // autoPlay: true,
         ),
       ),
+      initialRoute: '/splash',
       routes: {
         '/splash': (context) => const SplashPage(),
         '/login': (context) => const LoginPage(),

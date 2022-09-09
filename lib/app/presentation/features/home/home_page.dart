@@ -65,7 +65,7 @@ class _HomePageState extends State<HomePage> {
       _isShowcase = true;
       SharedPref().save("showcase", true);
     }
-    _isShowcase = await SharedPref().read("showcase") ?? true;
+    _isShowcase = (SharedPref().read("showcase")).toString().isEmpty;
     if (_isShowcase) {
       WidgetsBinding.instance.addPostFrameCallback(
         (_) => ShowCaseWidget.of(context).startShowCase([
@@ -78,12 +78,12 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> buscarMovimentacoesNoSQLite() async {
-    name = await SharedPref().read("name");
+    name = await SharedPref().read("name") as String;
     storeAuth.setName(name!);
     WidgetsFlutterBinding.ensureInitialized();
     movimentacoes = await dbSQLite.buscarMovimentacoes();
     if (movimentacoes.isNotEmpty) {
-      movimentacoes.forEach((element) => storeMov.addItemMovimentacao(element));
+      movimentacoes.forEach((element) => storeMov.addItemMovimentacao(element as ItemMovimentacao));
       storeMov.listMovimentacao.forEach((item) {
         double valor = double.parse(item.valor!);
         if (item.isDespesa!) {
@@ -398,7 +398,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void _exibirModalBottomSheet(context) {
+  void _exibirModalBottomSheet(BuildContext context) {
     showModalBottomSheet(
         context: context,
         builder: (BuildContext bc) {
@@ -429,7 +429,7 @@ class _HomePageState extends State<HomePage> {
         });
   }
 
-  void _exibirDialogEntradas(context) {
+  void _exibirDialogEntradas(BuildContext context) {
     showModalBottomSheet(
         context: context,
         builder: (BuildContext context) {
@@ -437,7 +437,7 @@ class _HomePageState extends State<HomePage> {
         });
   }
 
-  void _exibirDialogSaidas(context) {
+  void _exibirDialogSaidas(BuildContext context) {
     showModalBottomSheet(
         context: context,
         builder: (BuildContext context) {

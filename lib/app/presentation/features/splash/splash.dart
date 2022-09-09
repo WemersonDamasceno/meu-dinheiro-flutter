@@ -18,7 +18,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
   }
 
   void navigationPage() async {
-    String? name = await SharedPref().read("name");
+    String? name = await SharedPref().read("name") as String?;
     if (name != null) {
       Navigator.pushReplacementNamed(context, '/home', arguments: {
         'name': name,

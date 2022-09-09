@@ -1,10 +1,12 @@
 analyzer:
-    
   exclude: 
     - lib/**/**.g.dart
     - test/**/**.mocks.dart
-
-code-style:
+  
+  language:
+    #strict-casts: true # nunca converta implicitamente de dynamic para um tipo mais específico
+    #strict-raw-types: true # definir tipos explicitamente nunca dinamicos, apenas quando não for possivel definir um tipo
+    #strict-inference: true # nunca escolha um tipo dynamic quando não puder determinar um tipo estatico.
   
   
 linter:  
@@ -14,7 +16,7 @@ linter:
     avoid_returning_null_for_future: true # Evite retornar null para metodos assincronos.
     use_key_in_widget_constructors: true # Use sempre contrutores com keys
     always_declare_return_types: true # Sempre declare o tipo de retorno dos metodos
-    camel_case_types: true # Tipo deverão usar o padrão UpperCamelCase. 
+    camel_case_types: true # Nomes de class ou widget deverão usar o padrão UpperCamelCase. 
     avoid_setters_without_getters: true #Evite usar setters sem getters
     avoid_unnecessary_containers: true # Não use Containers que não são necessários
     avoid_unused_constructor_parameters: true # Evite definir parâmetros não utilizados em construtores.

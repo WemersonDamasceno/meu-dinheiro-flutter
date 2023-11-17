@@ -13,7 +13,6 @@ linter:
   #regras para o codigo do aplicativo
   rules:
     always_use_package_imports: true # Use sempre imports por packages 
-    avoid_returning_null_for_future: true # Evite retornar null para metodos assincronos.
     use_key_in_widget_constructors: true # Use sempre contrutores com keys
     always_declare_return_types: true # Sempre declare o tipo de retorno dos metodos
     camel_case_types: true # Nomes de class ou widget deverão usar o padrão UpperCamelCase. 

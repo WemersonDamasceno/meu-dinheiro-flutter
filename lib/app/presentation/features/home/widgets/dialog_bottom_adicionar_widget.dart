@@ -1,6 +1,6 @@
-import 'package:finances/app/data/models/movimentacoes.dart';
-import 'package:finances/app/presentation/features/home/widgets/input_widget.dart';
-import 'package:finances/app/presentation/stores/movimentacoes/movimentacoes_store.dart';
+import 'package:dinheiro_certo/app/data/models/movimentacoes.dart';
+import 'package:dinheiro_certo/app/presentation/features/home/widgets/input_widget.dart';
+import 'package:dinheiro_certo/app/presentation/stores/movimentacoes/movimentacoes_store.dart';
 import 'package:flutter/material.dart';
 
 class DialogBottomAdd extends StatefulWidget {
@@ -77,8 +77,12 @@ class _DialogBottomAddState extends State<DialogBottomAdd> {
                       child: Container(
                         height: 70,
                         width: 90,
-                        color: controllerIcon == 1 ? Colors.red : Colors.transparent,
-                        child: const Card(elevation: 1, child: Icon(Icons.account_balance_wallet_rounded)),
+                        color: controllerIcon == 1
+                            ? Colors.red
+                            : Colors.transparent,
+                        child: const Card(
+                            elevation: 1,
+                            child: Icon(Icons.account_balance_wallet_rounded)),
                       ),
                     ),
                     SizedBox(
@@ -91,8 +95,12 @@ class _DialogBottomAddState extends State<DialogBottomAdd> {
                       child: Container(
                         height: 70,
                         width: 90,
-                        color: controllerIcon == 2 ? Colors.red : Colors.transparent,
-                        child: const Card(elevation: 1, child: Icon(Icons.monetization_on_outlined)),
+                        color: controllerIcon == 2
+                            ? Colors.red
+                            : Colors.transparent,
+                        child: const Card(
+                            elevation: 1,
+                            child: Icon(Icons.monetization_on_outlined)),
                       ),
                     ),
                   ],
@@ -107,7 +115,8 @@ class _DialogBottomAddState extends State<DialogBottomAdd> {
                 child: ElevatedButton(
                     child: const Text(
                       'Adicionar',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                     onPressed: () {
                       String dia = "${DateTime.now().day}";

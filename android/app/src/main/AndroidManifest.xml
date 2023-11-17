@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.finances">
+    package="com.wid4software.dinheiro_certo">
    <application
         android:label="Meu Dinheiro"
         android:icon="@mipmap/launcher_icon">

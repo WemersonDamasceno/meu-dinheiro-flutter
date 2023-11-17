@@ -1,5 +1,5 @@
-import 'package:finances/app/presentation/features/home/home_page.dart';
-import 'package:finances/core/shared_preferences.dart';
+import 'package:dinheiro_certo/app/presentation/features/home/home_page.dart';
+import 'package:dinheiro_certo/core/shared_preferences.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {

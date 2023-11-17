@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:finances/core/shared_preferences.dart';
+import 'package:dinheiro_certo/core/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
@@ -63,7 +63,10 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                 ),
                 const Text(
                   "Meu Dinheiro!",
-                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.w700, color: Colors.white),
+                  style: TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white),
                 ),
               ],
             ),

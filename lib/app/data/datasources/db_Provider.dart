@@ -2,7 +2,7 @@
 
 import 'dart:io';
 
-import 'package:finances/app/data/models/movimentacoes.dart';
+import 'package:dinheiro_certo/app/data/models/movimentacoes.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
